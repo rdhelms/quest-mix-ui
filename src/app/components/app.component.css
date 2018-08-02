@@ -1,0 +1,40 @@
+.app__header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    background: slategray;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.app__header-options {
+    margin: 0 1rem;
+}
+
+.app__header-option {
+    margin: 0 0.5rem;
+}
+
+.app__main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app__game-screen {
+    height: 75%;
+    width: 75%;
+    border: 1px solid black;
+}
+
+.app__game-editor {
+    height: 75%;
+    width: 75%;
+    border: 1px solid black;
+}

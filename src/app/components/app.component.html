@@ -1,0 +1,12 @@
+<header class='app__header'>
+  <h1>ZZT Mock</h1>
+  <div class='app__header-options'>
+    <button class='app__header-option' (click)='changeView("player")'>Play</button>
+    <button class='app__header-option' (click)='changeView("editor")'>Create</button>
+  </div>
+</header>
+
+<main class='app__main'>
+  <app-game-screen *ngIf='view === "player"' class='app__game-screen'></app-game-screen>
+  <app-game-editor *ngIf='view === "editor"' class='app__game-editor'></app-game-editor>
+</main>

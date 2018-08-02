@@ -1,0 +1,14 @@
+<canvas 
+    #gameScreenCanvas 
+    class='game-screen__canvas' 
+    width='400' 
+    height='400'
+    tabIndex='1'
+    (keyup)='handleKeyUp($event)'
+></canvas>
+<div class='game-screen__controls'>
+    <button (click)='movePlayer("left")'>Left</button>
+    <button (click)='movePlayer("right")'>Right</button>
+    <button (click)='movePlayer("up")'>Up</button>
+    <button (click)='movePlayer("down")'>Down</button>
+</div>

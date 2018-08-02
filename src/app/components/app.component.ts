@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'zztjs';
+  view = 'editor';
+
+  changeView(newView: 'player' | 'editor') {
+    this.view = newView;
+  }
 }

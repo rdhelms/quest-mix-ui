@@ -1,0 +1,15 @@
+<canvas 
+    #gameEditorCanvas 
+    class='game-editor__canvas' 
+    width='400' 
+    height='400'
+    tabIndex='1'
+    (keyup)='handleKeyUp($event)'
+    (mousedown)='handleMouseDown($event)'
+    (mouseup)='handleMouseUp()'
+    (mousemove)='handleMouseMove($event)'
+></canvas>
+<div class='game-editor__tools'>
+    <button (click)='clear()'>Clear</button>
+    <button (click)='save($event)'>Save</button>
+</div>
