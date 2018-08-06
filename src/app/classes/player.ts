@@ -14,7 +14,7 @@ export class Player {
             width: 5,
             height: 10
         } as IPlayerSize,
-        color: 'rgb(255,255,255)'
+        color: '#FFFFFF'
     }
 
     pos: IPosition = Player.defaults.pos;
@@ -74,8 +74,10 @@ export class Player {
             const sceneObjects = this.currentScene.objects;
             const collisions = sceneObjects.filter((sceneObj) => {
                 return (
-                    Math.abs(sceneObj.pos.x - newPos.x) < this.size.width &&
-                    Math.abs(sceneObj.pos.y - newPos.y) < this.size.height
+                    newPos.x < sceneObj.pos.x + sceneObj.size.width &&
+                    newPos.x + this.size.width > sceneObj.pos.x &&
+                    newPos.y < sceneObj.pos.y + sceneObj.size.height &&
+                    newPos.y + this.size.height > sceneObj.pos.y
                 );
             });
             if (collisions.length > 0) {

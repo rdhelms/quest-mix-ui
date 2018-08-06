@@ -6,8 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'zztjs';
-  view = 'editor';
+  title = 'Quest Creator';
+  view = 'home';
 
   changeView(newView: 'player' | 'editor') {
     this.view = newView;

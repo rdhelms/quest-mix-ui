@@ -1,0 +1,27 @@
+<canvas 
+    #backgroundEditorCanvas 
+    class='background-editor__canvas' 
+    width='600' 
+    height='600'
+    tabIndex='1'
+    (keyup)='handleKeyUp($event)'
+    (mousedown)='handleMouseDown($event)'
+    (mouseup)='handleMouseUp()'
+    (mousemove)='handleMouseMove($event)'
+    (mouseleave)='handleMouseLeave()'
+></canvas>
+<div class='background-editor__tools'>
+    <button class='background-editor__clear-btn' (click)='clear()'>Clear</button>
+    <button class='background-editor__save-btn' (click)='save($event)'>Save</button>
+    <p>
+        <button class='background-editor__erase-btn' [class.active]='erasing' (click)='erasing=!erasing'>Erase</button>
+    </p>
+    <p>
+        <label>Color</label>
+        <input type='color' [(ngModel)]='brushColor'>
+    </p>
+    <p>
+        <label>Brush Size</label>
+        <input type="range" [min]='pixelSize' [max]='pixelSize * 10' [step]='pixelSize' [(ngModel)]='brushSize'>
+    </p>
+</div>

@@ -1,0 +1,40 @@
+.home__lists {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+}
+
+.home__list {
+    min-width: 20rem;
+    width: calc(100% * (1/2) - 1rem);
+    border: 1px solid black;
+    border-radius: 4px;
+    margin: 0.5rem;
+}
+
+.home__list-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: slategray;
+    color: white;
+    border-radius: 4px 4px 0 0;
+    padding: 0.5rem;
+}
+
+.home__list-header:hover {
+    background-color: steelblue;
+}
+
+.home__list-item {
+    cursor: pointer;
+    padding: 0.4rem;
+}
+
+.home__list-item:hover {
+    background-color: steelblue;
+    color: white;
+}

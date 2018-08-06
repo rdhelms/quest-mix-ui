@@ -1,15 +1,26 @@
-<canvas 
-    #gameEditorCanvas 
-    class='game-editor__canvas' 
-    width='400' 
-    height='400'
-    tabIndex='1'
-    (keyup)='handleKeyUp($event)'
-    (mousedown)='handleMouseDown($event)'
-    (mouseup)='handleMouseUp()'
-    (mousemove)='handleMouseMove($event)'
-></canvas>
+<ng-container [ngSwitch]='currentlyEditing.type'>
+    <div class='game-editor__world-editor'>
+        <canvas 
+            *ngSwitchCase='"world"'
+            #gameEditorCanvas 
+            class='game-editor__canvas' 
+            width='600' 
+            height='600'
+            tabIndex='1'
+            (keyup)='handleKeyUp($event)'
+            (mousedown)='handleMouseDown($event)'
+            (mouseup)='handleMouseUp()'
+            (mousemove)='handleMouseMove($event)'
+            (mouseleave)='handleMouseLeave()'
+        ></canvas>
+    </div>
+    <app-background-editor class='game-editor__background-editor' *ngSwitchCase='"background"'></app-background-editor>
+</ng-container>
 <div class='game-editor__tools'>
-    <button (click)='clear()'>Clear</button>
-    <button (click)='save($event)'>Save</button>
+    <button [class.active]='currentlyEditing.type === "world"' (click)='currentlyEditing.type="world"'>Worlds</button>
+    <button [class.active]='currentlyEditing.type === "background"' (click)='currentlyEditing.type="background"'>Backgrounds</button>
+    <button [class.active]='currentlyEditing.type === "foreground"' (click)='currentlyEditing.type="foreground"'>Foregrounds</button>
+    <button [class.active]='currentlyEditing.type === "object"' (click)='currentlyEditing.type="object"'>Objects</button>
+    <button [class.active]='currentlyEditing.type === "entity"' (click)='currentlyEditing.type="entity"'>Entities</button>
+    <button [class.active]='currentlyEditing.type === "avatar"' (click)='currentlyEditing.type="avatar"'>Avatars</button>
 </div>
