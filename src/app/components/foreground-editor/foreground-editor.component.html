@@ -1,7 +1,7 @@
-<input class='background-editor__name-input' type='text' [(ngModel)]='name' placeholder='Name'>
+<input class='foreground-editor__name-input' type='text' [(ngModel)]='name' placeholder='Name'>
 <canvas 
-    #backgroundEditorCanvas 
-    class='background-editor__canvas' 
+    #foregroundEditorCanvas 
+    class='foreground-editor__canvas' 
     [width]='canvasSize' 
     [height]='canvasSize'
     tabIndex='1'
@@ -11,11 +11,11 @@
     (mousemove)='handleMouseMove($event)'
     (mouseleave)='handleMouseLeave()'
 ></canvas>
-<div class='background-editor__tools'>
-    <button class='background-editor__clear-btn' (click)='clear()'>Clear</button>
-    <button class='background-editor__save-btn' (click)='save($event)'>Save</button>
+<div class='foreground-editor__tools'>
+    <button class='foreground-editor__clear-btn' (click)='clear()'>Clear</button>
+    <button class='foreground-editor__save-btn' (click)='save($event)'>Save</button>
     <p>
-        <button class='background-editor__erase-btn' [class.active]='erasing' (click)='erasing=!erasing'>Erase</button>
+        <button class='foreground-editor__erase-btn' [class.active]='erasing' (click)='erasing=!erasing'>Erase</button>
     </p>
     <p>
         <label>Color</label>

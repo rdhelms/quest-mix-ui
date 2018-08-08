@@ -1,24 +1,25 @@
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit, ElementRef, Input } from '@angular/core';
-import { IPixel } from '../../types/editor.types';
-import { BackgroundService } from '../../services/background.service';
-
-const pixelSize = 4;
+import { IPixel, TFrame } from '../../types/editor.types';
+import { AvatarService } from '../../services/avatar.service';
 
 @Component({
-    selector: 'app-background-editor',
-    templateUrl: './background-editor.component.html',
-    styleUrls: ['./background-editor.component.css']
+    selector: 'app-avatar-editor',
+    templateUrl: './avatar-editor.component.html',
+    styleUrls: ['./avatar-editor.component.css']
 })
-export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AvatarEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @Input() canvasSize!: number;
-    @Input() backgroundId?: number;
+    @Input() avatarId?: number;
 
-    @ViewChild('backgroundEditorCanvas') canvasRef?: ElementRef;
+    @ViewChild('avatarEditorCanvas') canvasRef?: ElementRef;
+    @ViewChild('avatarPreviewCanvas') previewRef?: ElementRef;
 
     canvas?: HTMLCanvasElement;
-    pixelSize: number = pixelSize;
+    preview?: HTMLCanvasElement;
+    pixelSize: number = 4;
     animationRequest?: number;
+    previewRequest?: number;
     mousePos: {
         x?: number;
         y?: number;
@@ -28,26 +29,34 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
     paintingInterval?: number;
     erasing: boolean = false;
     name: string = '';
-    pixels: IPixel[][] = [];
+    frames: TFrame[] = Array(4).fill(null).map(() => []);
+    currentFrame: TFrame = this.frames[0];
+    currentPreviewFrame: TFrame = this.frames[0];
+    animationCounter: number = 0;
 
     constructor(
-        private backgroundService: BackgroundService
+        private avatarService: AvatarService
     ) { }
 
     async ngOnInit() {
-        // if (this.backgroundId !== undefined) {
-            const loadedBackground = await this.backgroundService.getBackground(/*this.backgroundId*/);
-            if (loadedBackground) {
-                this.name = loadedBackground.name || '';
-                this.pixels = loadedBackground.pixels;
+        // if (this.avatarId !== undefined) {
+            const loadedAvatar = await this.avatarService.getAvatar(/*this.avatarId*/);
+            if (loadedAvatar) {
+                this.name = loadedAvatar.name || '';
+                this.frames = loadedAvatar.frames;
             }
         // }
+        this.currentFrame = this.frames[0];
     }
 
     ngAfterViewInit() {
         this.canvas = this.canvasRef && this.canvasRef.nativeElement;
+        this.preview = this.previewRef && this.previewRef.nativeElement;
         this.animationRequest = window.requestAnimationFrame(() => {
             this.drawEditor();
+        });
+        this.previewRequest = window.requestAnimationFrame(() => {
+            this.drawPreview();
         });
     }
 
@@ -57,6 +66,9 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
         }
         if (this.animationRequest) {
             window.cancelAnimationFrame(this.animationRequest);
+        }
+        if (this.previewRequest) {
+            window.cancelAnimationFrame(this.previewRequest);
         }
         this.save();
     }
@@ -77,13 +89,49 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    drawPreview() {
+        const preview = this.preview;
+        if (preview) {
+            const ctx = preview.getContext('2d');
+            if (ctx && this.currentPreviewFrame instanceof Array) {
+                ctx.clearRect(0, 0, preview.width, preview.height);
+                this.currentPreviewFrame.forEach((pixelRow) => {
+                    pixelRow instanceof Array && pixelRow.forEach((pixel) => {
+                        if (pixel) {
+                            ctx.fillStyle = pixel.color;
+                            ctx.fillRect(
+                                pixel.pos.x,
+                                pixel.pos.y,
+                                pixel.size,
+                                pixel.size
+                            );
+                        }
+                    });
+                });
+                if (this.animationCounter > 10) {
+                    this.animationCounter = 0;
+                    const currentPreviewFrameIndex = this.frames.indexOf(this.currentPreviewFrame);
+                    if (currentPreviewFrameIndex < this.frames.length - 1) {
+                        this.currentPreviewFrame = this.frames[currentPreviewFrameIndex + 1];
+                    } else {
+                        this.currentPreviewFrame = this.frames[0];
+                    }
+                }
+                this.animationCounter++;
+                this.previewRequest = window.requestAnimationFrame(() => {
+                    this.drawPreview();
+                });
+            }
+        }
+    }
+
     drawPixels() {
         const canvas = this.canvas;
         if (canvas) {
             const ctx = canvas.getContext('2d');
-            if (ctx && this.pixels instanceof Array) {
+            if (ctx && this.currentFrame instanceof Array) {
                 ctx.beginPath();
-                this.pixels.forEach((pixelRow) => {
+                this.currentFrame.forEach((pixelRow) => {
                     pixelRow instanceof Array && pixelRow.forEach((pixel) => {
                         if (pixel) {
                             ctx.fillStyle = pixel.color;
@@ -186,20 +234,20 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     deletePixel(x: number, y: number) {
-        const row = this.pixels[x];
+        const row = this.currentFrame[x];
         if (row instanceof Array) {
             delete row[y];
         }
     }
 
     addPixel(newPixel: IPixel) {
-        const row = this.pixels[newPixel.pos.x];
+        const row = this.currentFrame[newPixel.pos.x];
         // If the row does not yet exist, create it with the new pixel
         // If the row does exist, update the pixel in that row
         if (!row) {
             const newRow: IPixel[] = [];
             newRow[newPixel.pos.y] = newPixel;
-            this.pixels[newPixel.pos.x] = newRow;
+            this.currentFrame[newPixel.pos.x] = newRow;
         } else {
             row[newPixel.pos.y] = newPixel;
         }
@@ -210,6 +258,10 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     handleMouseLeave() {
+        this.mousePos = {
+            x: undefined,
+            y: undefined
+        };
         this.clearPaintingInterval();
     }
 
@@ -222,18 +274,18 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
     clear() {
         const confirm = window.confirm('Are you sure you want to clear this scene?');
         if (!confirm) return;
-        if (this.pixels) {
-            this.pixels = [];
+        if (this.currentFrame) {
+            this.currentFrame = [];
         }
     }
 
     save(evt?: MouseEvent) {
-        if (this.pixels) {
-            const background = {
+        if (this.currentFrame) {
+            const avatar = {
                 name: this.name,
-                pixels: this.pixels
+                frames: this.frames
             };
-            this.backgroundService.saveBackground(background).then(() => {
+            this.avatarService.saveAvatar(avatar).then(() => {
                 // Checking for the event ensures that the alert is only shown after the button is clicked
                 // as opposed to when this method is called as a background save
                 if (evt) {
@@ -243,4 +295,30 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    prevFrame() {
+        const currentIndex = this.frames.indexOf(this.currentFrame);
+        if (currentIndex > 0) {
+            this.currentFrame = this.frames[currentIndex - 1];
+        }
+    }
+
+    nextFrame() {
+        const currentIndex = this.frames.indexOf(this.currentFrame);
+        if (currentIndex < this.frames.length - 1) {
+            this.currentFrame = this.frames[currentIndex + 1];
+        }
+    }
+
+    copyFrame() {
+        this.avatarService.copyFrame(this.currentFrame);
+    }
+
+    pasteFrame() {
+        const frameToPaste = this.avatarService.pasteFrame();
+        if (frameToPaste) {
+            const currentIndex = this.frames.indexOf(this.currentFrame);
+            this.frames[currentIndex] = frameToPaste;
+            this.currentFrame = this.frames[currentIndex];
+        }
+    }
 }

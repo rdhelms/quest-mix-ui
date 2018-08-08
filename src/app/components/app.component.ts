@@ -8,8 +8,21 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'Quest Creator';
   view = 'home';
+  currentlyEditing?: any = {
+      type: 'avatar',
+      info: {
+          id: 0
+      }
+  };
 
-  changeView(newView: 'player' | 'editor') {
+  changeView(newView: 'home' | 'profile' | 'player' | 'editor') {
     this.view = newView;
+  }
+
+  selectedAsset(asset: any) {
+    if (asset) {
+      this.currentlyEditing = asset;
+      this.changeView('editor');
+    }
   }
 }

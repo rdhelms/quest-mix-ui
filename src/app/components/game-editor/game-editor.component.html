@@ -4,8 +4,8 @@
             *ngSwitchCase='"world"'
             #gameEditorCanvas 
             class='game-editor__canvas' 
-            width='600' 
-            height='600'
+            [width]='canvasSize' 
+            [height]='canvasSize'
             tabIndex='1'
             (keyup)='handleKeyUp($event)'
             (mousedown)='handleMouseDown($event)'
@@ -14,7 +14,31 @@
             (mouseleave)='handleMouseLeave()'
         ></canvas>
     </div>
-    <app-background-editor class='game-editor__background-editor' *ngSwitchCase='"background"'></app-background-editor>
+    <app-background-editor 
+        class='game-editor__background-editor' 
+        *ngSwitchCase='"background"'
+        [canvasSize]='canvasSize'
+    ></app-background-editor>
+    <app-foreground-editor 
+        class='game-editor__foreground-editor' 
+        *ngSwitchCase='"foreground"'
+        [canvasSize]='canvasSize'
+    ></app-foreground-editor>
+    <app-object-editor 
+        class='game-editor__object-editor' 
+        *ngSwitchCase='"object"'
+        [canvasSize]='canvasSize'
+    ></app-object-editor>
+    <app-entity-editor 
+        class='game-editor__entity-editor' 
+        *ngSwitchCase='"entity"'
+        [canvasSize]='canvasSize'
+    ></app-entity-editor>
+    <app-avatar-editor 
+        class='game-editor__avatar-editor' 
+        *ngSwitchCase='"avatar"'
+        [canvasSize]='canvasSize'
+    ></app-avatar-editor>
 </ng-container>
 <div class='game-editor__tools'>
     <button [class.active]='currentlyEditing.type === "world"' (click)='currentlyEditing.type="world"'>Worlds</button>

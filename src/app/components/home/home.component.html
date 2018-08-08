@@ -1,51 +1,11 @@
 <div class='home__lists'>
-  <ul class='home__list'>
-    <h3 class='home__list-header'>Quests</h3>
-    <li class='home__list-item'>Quest 1</li>
-    <li class='home__list-item'>Quest 2</li>
-    <li class='home__list-item'>Quest 3</li>
+
+  <ul *ngFor='let assetType of ["quests", "worlds", "backgrounds", "foregrounds", "objects", "entities", "avatars"]' class='home__list'>
+    <h3 class='home__list-header' (click)='selectAsset(assetType)'>{{assetType | uppercase}}</h3>
+    <p *ngIf='!this[assetType] || (this[assetType].length === 0)' class='home__list-item'>No Assets Found</p>
+    <li *ngFor='let asset of this[assetType]' class='home__list-item' (click)='selectAsset(assetType, asset)'>
+      {{asset.name || 'No Name'}}
+    </li>
   </ul>
 
-  
-  <ul class='home__list'>
-    <h3 class='home__list-header'>Worlds</h3>
-    <li class='home__list-item'>World 1</li>
-    <li class='home__list-item'>World 2</li>
-    <li class='home__list-item'>World 3</li>
-  </ul>
-
-  <ul class='home__list'>
-    <h3 class='home__list-header'>Backgrounds</h3>
-    <li class='home__list-item'>Background 1</li>
-    <li class='home__list-item'>Background 2</li>
-    <li class='home__list-item'>Background 3</li>
-  </ul>
-
-  <ul class='home__list'>
-    <h3 class='home__list-header'>Foregrounds</h3>
-    <li class='home__list-item'>Foreground 1</li>
-    <li class='home__list-item'>Foreground 2</li>
-    <li class='home__list-item'>Foreground 3</li>
-  </ul>
-
-  <ul class='home__list'>
-    <h3 class='home__list-header'>Objects</h3>
-    <li class='home__list-item'>Object 1</li>
-    <li class='home__list-item'>Object 2</li>
-    <li class='home__list-item'>Object 3</li>
-  </ul>
-
-  <ul class='home__list'>
-    <h3 class='home__list-header'>Entities</h3>
-    <li class='home__list-item'>Entity 1</li>
-    <li class='home__list-item'>Entity 2</li>
-    <li class='home__list-item'>Entity 3</li>
-  </ul>
-
-  <ul class='home__list'>
-    <h3 class='home__list-header'>Avatars</h3>
-    <li class='home__list-item'>Avatar 1</li>
-    <li class='home__list-item'>Avatar 2</li>
-    <li class='home__list-item'>Avatar 3</li>
-  </ul>
 </div>

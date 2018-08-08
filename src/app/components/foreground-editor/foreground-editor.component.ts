@@ -1,20 +1,20 @@
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit, ElementRef, Input } from '@angular/core';
 import { IPixel } from '../../types/editor.types';
-import { BackgroundService } from '../../services/background.service';
+import { ForegroundService } from '../../services/foreground.service';
 
 const pixelSize = 4;
 
 @Component({
-    selector: 'app-background-editor',
-    templateUrl: './background-editor.component.html',
-    styleUrls: ['./background-editor.component.css']
+    selector: 'app-foreground-editor',
+    templateUrl: './foreground-editor.component.html',
+    styleUrls: ['./foreground-editor.component.css']
 })
-export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ForegroundEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @Input() canvasSize!: number;
-    @Input() backgroundId?: number;
+    @Input() foregroundId?: number;
 
-    @ViewChild('backgroundEditorCanvas') canvasRef?: ElementRef;
+    @ViewChild('foregroundEditorCanvas') canvasRef?: ElementRef;
 
     canvas?: HTMLCanvasElement;
     pixelSize: number = pixelSize;
@@ -31,15 +31,15 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
     pixels: IPixel[][] = [];
 
     constructor(
-        private backgroundService: BackgroundService
+        private foregroundService: ForegroundService
     ) { }
 
     async ngOnInit() {
-        // if (this.backgroundId !== undefined) {
-            const loadedBackground = await this.backgroundService.getBackground(/*this.backgroundId*/);
-            if (loadedBackground) {
-                this.name = loadedBackground.name || '';
-                this.pixels = loadedBackground.pixels;
+        // if (this.foregroundId !== undefined) {
+            const loadedForeground = await this.foregroundService.getForeground(/*this.foregroundId*/);
+            if (loadedForeground) {
+                this.name = loadedForeground.name || '';
+                this.pixels = loadedForeground.pixels;
             }
         // }
     }
@@ -70,6 +70,7 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 this.drawPixels();
                 this.drawBrush();
+                ctx.closePath();
                 this.animationRequest = window.requestAnimationFrame(() => {
                     this.drawEditor();
                 });
@@ -96,6 +97,7 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
                         }
                     });
                 });
+                ctx.closePath();
             }
         }
     }
@@ -105,8 +107,8 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
         if (canvas) {
             const ctx = canvas.getContext('2d');
             if (ctx && this.mousePos.x !== undefined && this.mousePos.y !== undefined) {
-                ctx.beginPath();
                 ctx.save();
+                ctx.beginPath();
                 ctx.fillStyle = this.brushColor;
                 ctx.globalAlpha = 0.8;
                 const scaleFactor = this.brushSize * this.pixelSize;
@@ -115,6 +117,7 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
                         ctx.fillRect(i, j, this.pixelSize, this.pixelSize);
                     }
                 }
+                ctx.closePath();
                 ctx.restore();
                 ctx.strokeStyle = '#CCCCCC';
                 ctx.strokeRect(
@@ -141,6 +144,7 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
                     ctx.moveTo(0, j);
                     ctx.lineTo(canvas.width, j);
                 }
+                ctx.closePath();
                 ctx.strokeStyle = 'rgb(255,255,255)';
                 ctx.stroke();
             }
@@ -229,13 +233,13 @@ export class BackgroundEditorComponent implements OnInit, OnDestroy, AfterViewIn
 
     save(evt?: MouseEvent) {
         if (this.pixels) {
-            const background = {
+            const foreground = {
                 name: this.name,
                 pixels: this.pixels
             };
-            this.backgroundService.saveBackground(background).then(() => {
+            this.foregroundService.saveForeground(foreground).then(() => {
                 // Checking for the event ensures that the alert is only shown after the button is clicked
-                // as opposed to when this method is called as a background save
+                // as opposed to when this method is called as a foreground save
                 if (evt) {
                     alert('Saved!');
                 }

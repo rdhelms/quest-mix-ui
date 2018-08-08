@@ -9,8 +9,8 @@
 </header>
 
 <main class='app__main'>
-  <app-home *ngIf='view === "home"' class='app__home'></app-home>
+  <app-home *ngIf='view === "home"' class='app__home' (selectedAsset)='selectedAsset($event)'></app-home>
   <app-profile *ngIf='view === "profile"' class='app__profile'></app-profile>
   <app-game-screen *ngIf='view === "player"' class='app__game-screen'></app-game-screen>
-  <app-game-editor *ngIf='view === "editor"' class='app__game-editor'></app-game-editor>
+  <app-game-editor *ngIf='view === "editor"' class='app__game-editor' [currentlyEditing]='currentlyEditing'></app-game-editor>
 </main>

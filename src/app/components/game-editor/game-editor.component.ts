@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy, Input } from '@angular/core';
 import { World } from '../../classes/world';
 import { WorldService } from '../../services/world.service';
 import { Scene } from '../../classes/scene';
@@ -12,9 +12,17 @@ const pixelSize = 4;
 })
 export class GameEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
+    @Input() currentlyEditing: any = {
+        type: 'background',
+        info: {
+            id: 0
+        }
+    };
+
     @ViewChild('gameEditorCanvas')
     canvasRef?: ElementRef;
     canvas?: HTMLCanvasElement;
+    canvasSize: number = 600;
     pixelSize: number = pixelSize;
     animationRequest?: number;
     mousePos: {
@@ -24,10 +32,6 @@ export class GameEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     world?: World;
     currentSceneId: number = 0;
     currentScene?: Scene;
-    currentlyEditing: any = {
-        type: 'world',
-        id: 0
-    };
 
     constructor(
         private worldService: WorldService
@@ -64,9 +68,10 @@ export class GameEditorComponent implements OnInit, AfterViewInit, OnDestroy {
         if (canvas) {
             const ctx = canvas.getContext('2d');
             if (ctx) {
+                ctx.beginPath();
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 this.drawObjects();
-                window.requestAnimationFrame(() => {
+                this.animationRequest = window.requestAnimationFrame(() => {
                     this.drawEditor();
                 });
             }
@@ -78,6 +83,7 @@ export class GameEditorComponent implements OnInit, AfterViewInit, OnDestroy {
         if (canvas) {
             const ctx = canvas.getContext('2d');
             if (ctx && this.currentScene) {
+                ctx.beginPath();
                 this.currentScene.objects.forEach((object) => {
                     ctx.fillStyle = object.color;
                     ctx.fillRect(

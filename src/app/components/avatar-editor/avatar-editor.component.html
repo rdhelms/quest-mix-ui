@@ -1,0 +1,45 @@
+<input class='avatar-editor__name-input' type='text' [(ngModel)]='name' placeholder='Name'>
+<div class='avatar-editor__sprite-editor'>
+    <canvas 
+        #avatarEditorCanvas 
+        class='avatar-editor__canvas' 
+        [width]='canvasSize' 
+        [height]='canvasSize'
+        tabIndex='1'
+        (keyup)='handleKeyUp($event)'
+        (mousedown)='handleMouseDown($event)'
+        (mouseup)='handleMouseUp()'
+        (mousemove)='handleMouseMove($event)'
+        (mouseleave)='handleMouseLeave()'
+    ></canvas>
+    <div class='avatar-editor__sprite-options'>
+        <p>Frame {{ frames.indexOf(currentFrame) + 1 }} of {{ frames.length }}</p>
+        <button (click)='prevFrame()'> <- </button> 
+        <button (click)='nextFrame()'> -> </button>
+        <button (click)='copyFrame()'> Copy </button>
+        <button (click)='pasteFrame()'> Paste </button>
+        <p>Preview</p>
+        <canvas
+            #avatarPreviewCanvas
+            class='avatar-editor__preview'
+            [width]='canvasSize'
+            [height]='canvasSize'
+            tabIndex='2'
+        ></canvas>
+    </div>
+</div>
+<div class='avatar-editor__tools'>
+    <button class='avatar-editor__clear-btn' (click)='clear()'>Clear</button>
+    <button class='avatar-editor__save-btn' (click)='save($event)'>Save</button>
+    <p>
+        <button class='avatar-editor__erase-btn' [class.active]='erasing' (click)='erasing=!erasing'>Erase</button>
+    </p>
+    <p>
+        <label>Color</label>
+        <input type='color' [(ngModel)]='brushColor'>
+    </p>
+    <p>
+        <label>Brush Size</label>
+        <input type="range" [min]='0' [max]='20' [step]='1' [(ngModel)]='brushSize'>
+    </p>
+</div>

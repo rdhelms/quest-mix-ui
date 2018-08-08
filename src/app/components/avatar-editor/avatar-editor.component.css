@@ -1,4 +1,4 @@
-.background-editor__name-input {
+.avatar-editor__name-input {
     margin-top: 1rem;
     font-size: 1.2rem;
     padding: 0.4rem;
@@ -8,20 +8,34 @@
     border-radius: 4px;
 }
 
-.background-editor__name-input:focus {
+.avatar-editor__name-input:focus {
     box-shadow: 2px 2px 15px 1px #ccc;
 }
 
-.background-editor__canvas {
-    margin: 0.5rem;
-    width: calc(100vw - 2rem);
-    height: calc(100vh - 20rem);
+.avatar-editor__sprite-editor {
+    display: flex;
+    padding: 1rem;
+}
+
+.avatar-editor__canvas {
+    width: calc(40vw - 2rem);
+    height: calc(80vh - 15rem);
     background-color: black;
     border: 1px solid black;
     cursor: none;
 }
 
-.background-editor__tools {
+.avatar-editor__sprite-options {
+    margin: 0 0.5rem;
+}
+
+.avatar-editor__preview {
+    border: 1px solid black;
+    width: calc(40vw - 6rem);
+    height: calc(80vh - 24rem);
+}
+
+.avatar-editor__tools {
     width: calc(100% - 1rem);
     display: flex;
     align-items: center;
