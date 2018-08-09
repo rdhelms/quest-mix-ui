@@ -1,0 +1,49 @@
+<button (click)='createAsset()'> Create New {{assetType[0].toUpperCase() + assetType.slice(1)}} </button>
+<input class='asset-editor__name-input' type='text' [(ngModel)]='asset.name' placeholder='Name'>
+<div class='asset-editor__sprite-editor'>
+    <canvas 
+        #assetEditorCanvas 
+        class='asset-editor__canvas' 
+        [width]='canvasSize' 
+        [height]='canvasSize'
+        tabIndex='1'
+        (keyup)='handleKeyUp($event)'
+        (mousedown)='handleMouseDown($event)'
+        (mouseup)='handleMouseUp()'
+        (mousemove)='handleMouseMove($event)'
+        (mouseleave)='handleMouseLeave()'
+    ></canvas>
+    <div *ngIf='numFrames > 0' class='asset-editor__sprite-options'>
+        <p>Frame {{ asset.frames.indexOf(currentFrame) + 1 }} of {{ asset.frames.length }}</p>
+        <button (click)='prevFrame()'> <- </button> 
+        <button (click)='nextFrame()'> -> </button>
+        <button (click)='copyFrame()'> Copy </button>
+        <button (click)='pasteFrame()'> Paste </button>
+        <p>Preview</p>
+        <canvas
+            #assetPreviewCanvas
+            class='asset-editor__preview'
+            [width]='canvasSize'
+            [height]='canvasSize'
+            tabIndex='2'
+        ></canvas>
+    </div>
+</div>
+<div class='asset-editor__tools'>
+    <button class='asset-editor__clear-btn' (click)='clear()'>Clear</button>
+    <button class='asset-editor__save-btn' (click)='save($event)'>Save</button>
+    <p>
+        <button class='asset-editor__erase-btn' [class.active]='erasing' (click)='erasing=!erasing'>Erase</button>
+    </p>
+    <p>
+        <label>Color</label>
+        <input type='color' [(ngModel)]='brushColor'>
+    </p>
+    <p>
+        <label>Brush Size</label>
+        <input type="range" [min]='0' [max]='20' [step]='1' [(ngModel)]='brushSize'>
+    </p>
+</div>
+<nav class='asset-editor__nav'>
+    <button *ngFor='let type of ["world", "background", "foreground", "object", "entity", "avatar"]' [class.active]='assetType === type' (click)='selectAssetType(type)'>{{type | uppercase}}</button>
+</nav>

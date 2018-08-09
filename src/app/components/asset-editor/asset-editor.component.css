@@ -1,4 +1,4 @@
-.object-editor__name-input {
+.asset-editor__name-input {
     margin-top: 1rem;
     font-size: 1.2rem;
     padding: 0.4rem;
@@ -8,16 +8,16 @@
     border-radius: 4px;
 }
 
-.object-editor__name-input:focus {
+.asset-editor__name-input:focus {
     box-shadow: 2px 2px 15px 1px #ccc;
 }
 
-.object-editor__sprite-editor {
+.asset-editor__sprite-editor {
     display: flex;
     padding: 1rem;
 }
 
-.object-editor__canvas {
+.asset-editor__canvas {
     width: calc(40vw - 2rem);
     height: calc(80vh - 15rem);
     background-color: black;
@@ -25,17 +25,17 @@
     cursor: none;
 }
 
-.object-editor__sprite-options {
+.asset-editor__sprite-options {
     margin: 0 0.5rem;
 }
 
-.object-editor__preview {
+.asset-editor__preview {
     border: 1px solid black;
     width: calc(40vw - 6rem);
     height: calc(80vh - 24rem);
 }
 
-.object-editor__tools {
+.asset-editor__tools {
     width: calc(100% - 1rem);
     display: flex;
     align-items: center;

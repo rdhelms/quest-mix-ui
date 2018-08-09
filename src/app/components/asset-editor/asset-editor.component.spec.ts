@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BackgroundEditorComponent } from './background-editor.component';
+import { CanvasEditorComponent } from './asset-editor.component';
 
-describe('BackgroundEditorComponent', () => {
-  let component: BackgroundEditorComponent;
-  let fixture: ComponentFixture<BackgroundEditorComponent>;
+describe('CanvasEditorComponent', () => {
+  let component: CanvasEditorComponent;
+  let fixture: ComponentFixture<CanvasEditorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BackgroundEditorComponent ]
+      declarations: [ CanvasEditorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BackgroundEditorComponent);
+    fixture = TestBed.createComponent(CanvasEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

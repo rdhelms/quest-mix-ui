@@ -1,14 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { BackgroundService } from '../../services/background.service';
-import { IBackground } from '../../types/background.types';
-import { IAvatar } from '../../types/avatar.types';
-import { AvatarService } from '../../services/avatar.service';
-import { ForegroundService } from '../../services/foreground.service';
-import { IForeground } from '../../types/foreground.types';
-import { ObjectService } from '../../services/object.service';
-import { IObject } from '../../types/object.types';
-import { EntityService } from '../../services/entity.service';
-import { IEntity } from '../../types/entity.types';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { AssetService } from '../../services/asset.service';
+import { IAsset } from '../../types/asset.types';
 
 @Component({
     selector: 'app-home',
@@ -20,52 +12,47 @@ export class HomeComponent implements OnInit {
     @Output() selectedAssetType = new EventEmitter<any>();
     @Output() selectedAsset = new EventEmitter<any>();
 
-    backgrounds: IBackground[] = [];
-    foregrounds: IForeground[] = [];
-    objects: IObject[] = [];
-    entities: IEntity[] = [];
-    avatars: IAvatar[] = [];
+    backgrounds: IAsset[] = [];
+    foregrounds: IAsset[] = [];
+    objects: IAsset[] = [];
+    entities: IAsset[] = [];
+    avatars: IAsset[] = [];
 
     constructor(
-        private backgroundService: BackgroundService,
-        private foregroundService: ForegroundService,
-        private objectService: ObjectService,
-        private entityService: EntityService,
-        private avatarService: AvatarService
+        private assetService: AssetService
     ) { }
 
     async ngOnInit() {
-        // TODO: Get ALL the assets, instead of just the current ones in local storage
-
         // Backgrounds
-        const loadedBackground = await this.backgroundService.getBackground();
-        if (loadedBackground) {
-            this.backgrounds.push(loadedBackground);
+        const loadedBackgrounds = await this.assetService.getAssetsByType('background');
+        if (loadedBackgrounds) {
+            this.backgrounds = loadedBackgrounds;
         }
-
+        
         // Foregrounds
-        const loadedForeground = await this.foregroundService.getForeground();
-        if (loadedForeground) {
-            this.foregrounds.push(loadedForeground);
+        const loadedForegrounds = await this.assetService.getAssetsByType('foreground');
+        if (loadedForegrounds) {
+            this.foregrounds = loadedForegrounds;
         }
 
         // Objects
-        const loadedObject = await this.objectService.getObject();
-        if (loadedObject) {
-            this.objects.push(loadedObject);
+        const loadedObjects = await this.assetService.getAssetsByType('object');
+        if (loadedObjects) {
+            this.objects = loadedObjects;
         }
 
         // Entities
-        const loadedEntity = await this.entityService.getEntity();
-        if (loadedEntity) {
-            this.entities.push(loadedEntity);
+        const loadedEntities = await this.assetService.getAssetsByType('entity');
+        if (loadedEntities) {
+            this.entities = loadedEntities;
         }
 
         // Avatars
-        const loadedAvatar = await this.avatarService.getAvatar();
-        if (loadedAvatar) {
-            this.avatars.push(loadedAvatar);
+        const loadedAvatars = await this.assetService.getAssetsByType('avatar');
+        if (loadedAvatars) {
+            this.avatars = loadedAvatars;
         }
+
     }
 
     selectAsset(assetType: string, asset: any) {

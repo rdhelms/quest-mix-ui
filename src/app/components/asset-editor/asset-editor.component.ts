@@ -1,19 +1,22 @@
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit, ElementRef, Input } from '@angular/core';
 import { IPixel, TFrame } from '../../types/editor.types';
-import { EntityService } from '../../services/entity.service';
+import { AssetService } from '../../services/asset.service';
+import { IAsset, TAssetType } from '../../types/asset.types';
 
 @Component({
-    selector: 'app-entity-editor',
-    templateUrl: './entity-editor.component.html',
-    styleUrls: ['./entity-editor.component.css']
+    selector: 'app-asset-editor',
+    templateUrl: './asset-editor.component.html',
+    styleUrls: ['./asset-editor.component.css']
 })
-export class EntityEditorComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @Input() canvasSize!: number;
-    @Input() entityId?: number;
+    @Input() numFrames: number = 0;
+    @Input() assetType!: TAssetType;
+    @Input() assetId?: number;
 
-    @ViewChild('entityEditorCanvas') canvasRef?: ElementRef;
-    @ViewChild('entityPreviewCanvas') previewRef?: ElementRef;
+    @ViewChild('assetEditorCanvas') canvasRef?: ElementRef;
+    @ViewChild('assetPreviewCanvas') previewRef?: ElementRef;
 
     canvas?: HTMLCanvasElement;
     preview?: HTMLCanvasElement;
@@ -28,25 +31,33 @@ export class EntityEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     brushColor = '#FFFFFF';
     paintingInterval?: number;
     erasing: boolean = false;
-    name: string = '';
-    frames: TFrame[] = Array(4).fill(null).map(() => []);
-    currentFrame: TFrame = this.frames[0];
-    currentPreviewFrame: TFrame = this.frames[0];
+    asset: IAsset = {
+        id: Date.now(),
+        name: '',
+        frames: Array(4).fill(null).map(() => [])
+    };
+    currentFrame: TFrame = this.asset.frames[0];
+    currentPreviewFrame: TFrame = this.asset.frames[0];
     animationCounter: number = 0;
 
     constructor(
-        private entityService: EntityService
+        private assetService: AssetService
     ) { }
 
     async ngOnInit() {
-        // if (this.entityId !== undefined) {
-            const loadedEntity = await this.entityService.getEntity(/*this.entityId*/);
-            if (loadedEntity) {
-                this.name = loadedEntity.name || '';
-                this.frames = loadedEntity.frames;
-            }
-        // }
-        this.currentFrame = this.frames[0];
+        this.assetService.currentType = this.assetType;
+        let loadedAsset: IAsset | null | undefined;
+        if (this.assetId !== undefined) {
+            loadedAsset = await this.assetService.getAssetById(this.assetId);
+        }
+        if (!loadedAsset) {
+            loadedAsset = await this.assetService.getCurrentAsset();
+        }
+        if (loadedAsset) {
+            this.asset = loadedAsset;
+        }
+
+        this.currentFrame = this.asset.frames[0];
     }
 
     ngAfterViewInit() {
@@ -70,7 +81,6 @@ export class EntityEditorComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.previewRequest) {
             window.cancelAnimationFrame(this.previewRequest);
         }
-        this.save();
     }
 
     drawEditor() {
@@ -110,11 +120,11 @@ export class EntityEditorComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
                 if (this.animationCounter > 10) {
                     this.animationCounter = 0;
-                    const currentPreviewFrameIndex = this.frames.indexOf(this.currentPreviewFrame);
-                    if (currentPreviewFrameIndex < this.frames.length - 1) {
-                        this.currentPreviewFrame = this.frames[currentPreviewFrameIndex + 1];
+                    const currentPreviewFrameIndex = this.asset.frames.indexOf(this.currentPreviewFrame);
+                    if (currentPreviewFrameIndex < this.asset.frames.length - 1) {
+                        this.currentPreviewFrame = this.asset.frames[currentPreviewFrameIndex + 1];
                     } else {
-                        this.currentPreviewFrame = this.frames[0];
+                        this.currentPreviewFrame = this.asset.frames[0];
                     }
                 }
                 this.animationCounter++;
@@ -275,17 +285,16 @@ export class EntityEditorComponent implements OnInit, OnDestroy, AfterViewInit {
         const confirm = window.confirm('Are you sure you want to clear this scene?');
         if (!confirm) return;
         if (this.currentFrame) {
-            this.currentFrame = [];
+            const emptyFrame: TFrame = [];
+            const currentFrameIndex = this.asset.frames.indexOf(this.currentFrame);
+            this.asset.frames[currentFrameIndex] = emptyFrame;
+            this.currentFrame = emptyFrame;
         }
     }
 
     save(evt?: MouseEvent) {
         if (this.currentFrame) {
-            const entity = {
-                name: this.name,
-                frames: this.frames
-            };
-            this.entityService.saveEntity(entity).then(() => {
+            this.assetService.saveAsset(this.asset).then(() => {
                 // Checking for the event ensures that the alert is only shown after the button is clicked
                 // as opposed to when this method is called as a background save
                 if (evt) {
@@ -296,29 +305,44 @@ export class EntityEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     prevFrame() {
-        const currentIndex = this.frames.indexOf(this.currentFrame);
+        const currentIndex = this.asset.frames.indexOf(this.currentFrame);
         if (currentIndex > 0) {
-            this.currentFrame = this.frames[currentIndex - 1];
+            this.currentFrame = this.asset.frames[currentIndex - 1];
         }
     }
 
     nextFrame() {
-        const currentIndex = this.frames.indexOf(this.currentFrame);
-        if (currentIndex < this.frames.length - 1) {
-            this.currentFrame = this.frames[currentIndex + 1];
+        const currentIndex = this.asset.frames.indexOf(this.currentFrame);
+        if (currentIndex < this.asset.frames.length - 1) {
+            this.currentFrame = this.asset.frames[currentIndex + 1];
         }
     }
 
     copyFrame() {
-        this.entityService.copyFrame(this.currentFrame);
+        this.assetService.copyFrame(this.currentFrame);
     }
 
     pasteFrame() {
-        const frameToPaste = this.entityService.pasteFrame();
+        const frameToPaste = this.assetService.pasteFrame();
         if (frameToPaste) {
-            const currentIndex = this.frames.indexOf(this.currentFrame);
-            this.frames[currentIndex] = frameToPaste;
-            this.currentFrame = this.frames[currentIndex];
+            const currentIndex = this.asset.frames.indexOf(this.currentFrame);
+            this.asset.frames[currentIndex] = frameToPaste;
+            this.currentFrame = this.asset.frames[currentIndex];
         }
+    }
+
+    async createAsset() {
+        const newAsset = await this.assetService.createAsset(this.assetType);
+        this.asset = newAsset;
+    }
+
+    async selectAssetType(type: TAssetType) {
+        this.assetService.currentType = type;
+        let loadedAsset: IAsset | null | undefined;
+        loadedAsset = await this.assetService.getCurrentAsset();
+        if (loadedAsset) {
+            this.asset = loadedAsset;
+        }
+        this.assetType = type;
     }
 }

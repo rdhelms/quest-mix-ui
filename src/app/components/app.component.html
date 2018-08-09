@@ -1,16 +1,23 @@
 <header class='app__header'>
-  <h1>Quest Creator</h1>
-  <div class='app__header-options'>
-    <button [class.active]='view === "home"' class='app__header-option' (click)='changeView("home")'>Home</button>
-    <button [class.active]='view === "profile"' class='app__header-option' (click)='changeView("profile")'>Profile</button>
-    <button [class.active]='view === "player"' class='app__header-option' (click)='changeView("player")'>Play</button>
-    <button [class.active]='view === "editor"' class='app__header-option' (click)='changeView("editor")'>Create</button>
-  </div>
+    <h1>Quest Creator</h1>
+    <div class='app__header-options'>
+        <button [class.active]='view === "home"' class='app__header-option' (click)='changeView("home")'>Home</button>
+        <button [class.active]='view === "profile"' class='app__header-option' (click)='changeView("profile")'>Profile</button>
+        <button [class.active]='view === "player"' class='app__header-option' (click)='changeView("player")'>Play</button>
+        <button [class.active]='view === "editor"' class='app__header-option' (click)='changeView("editor")'>Create</button>
+    </div>
 </header>
 
 <main class='app__main'>
-  <app-home *ngIf='view === "home"' class='app__home' (selectedAsset)='selectedAsset($event)'></app-home>
-  <app-profile *ngIf='view === "profile"' class='app__profile'></app-profile>
-  <app-game-screen *ngIf='view === "player"' class='app__game-screen'></app-game-screen>
-  <app-game-editor *ngIf='view === "editor"' class='app__game-editor' [currentlyEditing]='currentlyEditing'></app-game-editor>
+    <app-home *ngIf='view === "home"' class='app__home' (selectedAsset)='selectedAsset($event)'></app-home>
+    <app-profile *ngIf='view === "profile"' class='app__profile'></app-profile>
+    <app-game-screen *ngIf='view === "player"' class='app__game-screen'></app-game-screen>
+    <app-asset-editor 
+        *ngIf='view === "editor"'
+        class='"app__" + currentlyEditing.type + "-editor"'
+        [canvasSize]='600'
+        [assetType]='currentlyEditing.type'
+        [assetId]='currentlyEditing.info?.id'
+        [numFrames]='(currentlyEditing.type === "background" || currentlyEditing.type === "foreground") ? 0 : 4'
+    ></app-asset-editor>
 </main>
