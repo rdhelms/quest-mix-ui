@@ -2,7 +2,7 @@
 
   <ul *ngFor='let assetType of ["quests", "worlds", "backgrounds", "foregrounds", "objects", "entities", "avatars"]' class='home__list'>
     <h3 class='home__list-header' (click)='selectAsset(assetType)'>{{assetType | uppercase}}</h3>
-    <p *ngIf='!this[assetType] || (this[assetType].length === 0)' class='home__list-item'>No Assets Found</p>
+    <p *ngIf='!this[assetType] || (this[assetType].length === 0)' class='home__list-no-items'>No Assets Found</p>
     <li *ngFor='let asset of this[assetType]' class='home__list-item' (click)='selectAsset(assetType, asset)'>
       {{asset.name || 'No Name'}}
     </li>

@@ -1,6 +1,25 @@
+.asset-editor__nav {
+    padding: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.asset-editor__nav > * {
+    margin-right: 0.5rem;
+    min-width: 5rem;
+}
+
+.asset-editor__top-toolbar {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3rem;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
 .asset-editor__name-input {
-    margin-top: 1rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
     padding: 0.4rem;
     outline: none;
     background-color: white;
@@ -12,37 +31,51 @@
     box-shadow: 2px 2px 15px 1px #ccc;
 }
 
-.asset-editor__sprite-editor {
+.asset-editor__tools {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     padding: 1rem;
+    background-color: slategray;
+    color: white;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
+.asset-editor__tools > * {
+    margin-right: 0.5rem;
+    min-width: 5rem;
+}
+
+.asset-editor__save-btn {
+    background-color: lemonchiffon;
+}
+
+.asset-editor__save-btn:hover {
+    background-color: lightgreen;
+    color: black;
+}
+
+.asset-editor__brush-sizer {
+    flex-grow: 1;
+}
+
+.asset-editor__sprite-editor {
+    width: 100%;
+    display: flex;
+    padding: 0.5rem;
 }
 
 .asset-editor__canvas {
-    width: calc(40vw - 2rem);
-    height: calc(80vh - 15rem);
+    width: 0;
+    flex-grow: 1;
     background-color: black;
     border: 1px solid black;
     cursor: none;
 }
 
 .asset-editor__sprite-options {
+    width: 0;
+    flex-grow: 2;
     margin: 0 0.5rem;
-}
-
-.asset-editor__preview {
-    border: 1px solid black;
-    width: calc(40vw - 6rem);
-    height: calc(80vh - 24rem);
-}
-
-.asset-editor__tools {
-    width: calc(100% - 1rem);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 1rem;
-    background-color: slategray;
-    color: white;
-    border: 1px solid black;
-    border-radius: 4px;
 }

@@ -8,6 +8,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { WorldEditorComponent } from './components/world-editor/world-editor.component';
 import { AssetEditorComponent } from './components/asset-editor/asset-editor.component';
+import { AssetPreviewComponent } from './components/asset-preview/asset-preview.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { AssetEditorComponent } from './components/asset-editor/asset-editor.com
     HomeComponent,
     ProfileComponent,
     WorldEditorComponent,
-    AssetEditorComponent
+    AssetEditorComponent,
+    AssetPreviewComponent
   ],
   imports: [
     BrowserModule,

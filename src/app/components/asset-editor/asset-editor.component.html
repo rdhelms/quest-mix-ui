@@ -1,5 +1,28 @@
-<button (click)='createAsset()'> Create New {{assetType[0].toUpperCase() + assetType.slice(1)}} </button>
-<input class='asset-editor__name-input' type='text' [(ngModel)]='asset.name' placeholder='Name'>
+<nav class='asset-editor__nav'>
+    <button *ngFor='let type of ["world", "background", "foreground", "object", "entity", "avatar"]' [class.active]='assetType === type' (click)='selectAssetType(type)'>{{type | uppercase}}</button>
+</nav>
+<div class='asset-editor__top-toolbar'>
+    <div>
+        <label> Name: </label>
+        <input *ngIf='asset' class='asset-editor__name-input' type='text' [(ngModel)]='asset.name'>
+    </div>
+    <button (click)='createAsset()'> Create New {{assetType[0].toUpperCase() + assetType.slice(1)}} </button>
+</div>
+<div class='asset-editor__tools'>
+    <button class='asset-editor__clear-btn' (click)='clear()'>Clear</button>
+    <button class='asset-editor__save-btn' (click)='save($event)'>Save</button>
+    <button class='asset-editor__brush-btn' [class.active]='drawType === "brush"' (click)='selectDrawType("brush")'>Brush</button>
+    <button class='asset-editor__erase-btn' [class.active]='drawType === "eraser"' (click)='selectDrawType("eraser")'>Erase</button>
+    <button class='asset-editor__color-picker-btn' [class.active]='drawType === "colorPicker"' (click)='selectDrawType("colorPicker")'>Color Picker</button>
+    <div class='asset-editor__color-icon'>
+        <label>Color</label>
+        <input type='color' [(ngModel)]='brushColor'>
+    </div>
+    <div class='asset-editor__brush-sizer'>
+        <label *ngIf='drawType === "brush" || drawType === "eraser"'>{{drawType[0].toUpperCase() + drawType.slice(1)}} Size</label>
+        <input *ngIf='drawType === "brush" || drawType === "eraser"' type="range" [min]='0' [max]='20' [step]='1' [(ngModel)]='brushSize'>
+    </div>
+</div>
 <div class='asset-editor__sprite-editor'>
     <canvas 
         #assetEditorCanvas 
@@ -13,37 +36,17 @@
         (mousemove)='handleMouseMove($event)'
         (mouseleave)='handleMouseLeave()'
     ></canvas>
-    <div *ngIf='numFrames > 0' class='asset-editor__sprite-options'>
+    <div *ngIf='numFrames > 1' class='asset-editor__sprite-options'>
         <p>Frame {{ asset.frames.indexOf(currentFrame) + 1 }} of {{ asset.frames.length }}</p>
         <button (click)='prevFrame()'> <- </button> 
         <button (click)='nextFrame()'> -> </button>
         <button (click)='copyFrame()'> Copy </button>
         <button (click)='pasteFrame()'> Paste </button>
         <p>Preview</p>
-        <canvas
-            #assetPreviewCanvas
+        <app-asset-preview
             class='asset-editor__preview'
-            [width]='canvasSize'
-            [height]='canvasSize'
-            tabIndex='2'
-        ></canvas>
+            [canvasSize]='canvasSize'
+            [asset]='asset'
+        ></app-asset-preview>
     </div>
 </div>
-<div class='asset-editor__tools'>
-    <button class='asset-editor__clear-btn' (click)='clear()'>Clear</button>
-    <button class='asset-editor__save-btn' (click)='save($event)'>Save</button>
-    <p>
-        <button class='asset-editor__erase-btn' [class.active]='erasing' (click)='erasing=!erasing'>Erase</button>
-    </p>
-    <p>
-        <label>Color</label>
-        <input type='color' [(ngModel)]='brushColor'>
-    </p>
-    <p>
-        <label>Brush Size</label>
-        <input type="range" [min]='0' [max]='20' [step]='1' [(ngModel)]='brushSize'>
-    </p>
-</div>
-<nav class='asset-editor__nav'>
-    <button *ngFor='let type of ["world", "background", "foreground", "object", "entity", "avatar"]' [class.active]='assetType === type' (click)='selectAssetType(type)'>{{type | uppercase}}</button>
-</nav>

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit, ElementRef, Input } from '@angular/core';
-import { IPixel, TFrame } from '../../types/editor.types';
+import { IPixel, TFrame, TDrawType } from '../../types/editor.types';
 import { AssetService } from '../../services/asset.service';
 import { IAsset, TAssetType } from '../../types/asset.types';
 
@@ -11,18 +11,14 @@ import { IAsset, TAssetType } from '../../types/asset.types';
 export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @Input() canvasSize!: number;
-    @Input() numFrames: number = 0;
     @Input() assetType!: TAssetType;
     @Input() assetId?: number;
 
     @ViewChild('assetEditorCanvas') canvasRef?: ElementRef;
-    @ViewChild('assetPreviewCanvas') previewRef?: ElementRef;
 
     canvas?: HTMLCanvasElement;
-    preview?: HTMLCanvasElement;
     pixelSize: number = 4;
     animationRequest?: number;
-    previewRequest?: number;
     mousePos: {
         x?: number;
         y?: number;
@@ -30,15 +26,10 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     brushSize: number = 10;
     brushColor = '#FFFFFF';
     paintingInterval?: number;
-    erasing: boolean = false;
-    asset: IAsset = {
-        id: Date.now(),
-        name: '',
-        frames: Array(4).fill(null).map(() => [])
-    };
-    currentFrame: TFrame = this.asset.frames[0];
-    currentPreviewFrame: TFrame = this.asset.frames[0];
-    animationCounter: number = 0;
+    drawType: TDrawType = 'brush';
+    asset?: IAsset;
+    numFrames?: number;
+    currentFrame?: TFrame;
 
     constructor(
         private assetService: AssetService
@@ -53,21 +44,24 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!loadedAsset) {
             loadedAsset = await this.assetService.getCurrentAsset();
         }
-        if (loadedAsset) {
+        if (!loadedAsset) {
+            this.asset = {
+                id: Date.now(),
+                name: '',
+                frames: (this.assetType === 'background' || this.assetType === 'foreground') ? [[]] : Array(4).fill(null).map(() => [])
+            }
+        } else {
             this.asset = loadedAsset;
         }
 
         this.currentFrame = this.asset.frames[0];
+        this.numFrames = this.asset.frames.length;
     }
 
     ngAfterViewInit() {
         this.canvas = this.canvasRef && this.canvasRef.nativeElement;
-        this.preview = this.previewRef && this.previewRef.nativeElement;
         this.animationRequest = window.requestAnimationFrame(() => {
             this.drawEditor();
-        });
-        this.previewRequest = window.requestAnimationFrame(() => {
-            this.drawPreview();
         });
     }
 
@@ -77,9 +71,6 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         if (this.animationRequest) {
             window.cancelAnimationFrame(this.animationRequest);
-        }
-        if (this.previewRequest) {
-            window.cancelAnimationFrame(this.previewRequest);
         }
     }
 
@@ -94,42 +85,6 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.drawBrush();
                 this.animationRequest = window.requestAnimationFrame(() => {
                     this.drawEditor();
-                });
-            }
-        }
-    }
-
-    drawPreview() {
-        const preview = this.preview;
-        if (preview) {
-            const ctx = preview.getContext('2d');
-            if (ctx && this.currentPreviewFrame instanceof Array) {
-                ctx.clearRect(0, 0, preview.width, preview.height);
-                this.currentPreviewFrame.forEach((pixelRow) => {
-                    pixelRow instanceof Array && pixelRow.forEach((pixel) => {
-                        if (pixel) {
-                            ctx.fillStyle = pixel.color;
-                            ctx.fillRect(
-                                pixel.pos.x,
-                                pixel.pos.y,
-                                pixel.size,
-                                pixel.size
-                            );
-                        }
-                    });
-                });
-                if (this.animationCounter > 10) {
-                    this.animationCounter = 0;
-                    const currentPreviewFrameIndex = this.asset.frames.indexOf(this.currentPreviewFrame);
-                    if (currentPreviewFrameIndex < this.asset.frames.length - 1) {
-                        this.currentPreviewFrame = this.asset.frames[currentPreviewFrameIndex + 1];
-                    } else {
-                        this.currentPreviewFrame = this.asset.frames[0];
-                    }
-                }
-                this.animationCounter++;
-                this.previewRequest = window.requestAnimationFrame(() => {
-                    this.drawPreview();
                 });
             }
         }
@@ -167,20 +122,34 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
                 ctx.save();
                 ctx.fillStyle = this.brushColor;
                 ctx.globalAlpha = 0.8;
-                const scaleFactor = this.brushSize * this.pixelSize;
-                for (let i = this.mousePos.x - scaleFactor; i <= this.mousePos.x + scaleFactor; i += this.pixelSize) {
-                    for (let j = this.mousePos.y - scaleFactor; j <= this.mousePos.y + scaleFactor; j += this.pixelSize) {
-                        ctx.fillRect(i, j, this.pixelSize, this.pixelSize);
+
+                // If the user has selected the color picker, draw just a pixel selector
+                // Otherwise, draw the full brush
+                if (this.drawType === 'colorPicker') {
+                    ctx.strokeStyle = '#FFFFFF';
+                    ctx.strokeRect(
+                        this.mousePos.x,
+                        this.mousePos.y,
+                        this.pixelSize,
+                        this.pixelSize
+                    );
+                } else {
+                    const scaleFactor = this.brushSize * this.pixelSize;
+                    for (let i = this.mousePos.x - scaleFactor; i <= this.mousePos.x + scaleFactor; i += this.pixelSize) {
+                        for (let j = this.mousePos.y - scaleFactor; j <= this.mousePos.y + scaleFactor; j += this.pixelSize) {
+                            ctx.fillRect(i, j, this.pixelSize, this.pixelSize);
+                        }
                     }
+                    ctx.strokeStyle = '#CCCCCC';
+                    ctx.strokeRect(
+                        this.mousePos.x - scaleFactor,
+                        this.mousePos.y - scaleFactor,
+                        (scaleFactor) * 2 + this.pixelSize,
+                        (scaleFactor) * 2 + this.pixelSize
+                    );
                 }
+
                 ctx.restore();
-                ctx.strokeStyle = '#CCCCCC';
-                ctx.strokeRect(
-                    this.mousePos.x - scaleFactor,
-                    this.mousePos.y - scaleFactor,
-                    (scaleFactor) * 2 + this.pixelSize,
-                    (scaleFactor) * 2 + this.pixelSize
-                );
             }
         }
     }
@@ -218,24 +187,37 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     handleMouseDown(evt: MouseEvent) {
         this.paintingInterval = window.setInterval(() => {
             if (this.mousePos.x !== undefined && this.mousePos.y !== undefined) {
-                const scaleFactor = this.brushSize * this.pixelSize;
-                for (let i = this.mousePos.x - scaleFactor; i <= this.mousePos.x + scaleFactor; i += this.pixelSize) {
-                    for (let j = this.mousePos.y - scaleFactor; j <= this.mousePos.y + scaleFactor; j += this.pixelSize) {
-                        if (this.canvas && (i < 0 || j < 0 || i > this.canvas.width || j > this.canvas.height)) {
-                            continue;
-                        }
-                        if (this.erasing) {
-                            this.deletePixel(i, j);
-                        } else {
-                            const newPixel = {
-                                pos: {
-                                    x: i,
-                                    y: j
-                                },
-                                size: this.pixelSize,
-                                color: this.brushColor
+                // If color-picking, then just grab the color from the currently selected pixel
+                // Otherwise, continue as usual
+                if (this.drawType === 'colorPicker') {
+                    let currentPixel;
+                    const currentRow = this.currentFrame && this.currentFrame[this.mousePos.x];
+                    if (currentRow instanceof Array) {
+                        currentPixel = currentRow[this.mousePos.y];
+                    }
+                    if (currentPixel) {
+                        this.brushColor = currentPixel.color;
+                    }
+                } else {
+                    const scaleFactor = this.brushSize * this.pixelSize;
+                    for (let i = this.mousePos.x - scaleFactor; i <= this.mousePos.x + scaleFactor; i += this.pixelSize) {
+                        for (let j = this.mousePos.y - scaleFactor; j <= this.mousePos.y + scaleFactor; j += this.pixelSize) {
+                            if (this.canvas && (i < 0 || j < 0 || i > this.canvas.width || j > this.canvas.height)) {
+                                continue;
                             }
-                            this.addPixel(newPixel);
+                            if (this.drawType === 'eraser') {
+                                this.deletePixel(i, j);
+                            } else {
+                                const newPixel = {
+                                    pos: {
+                                        x: i,
+                                        y: j
+                                    },
+                                    size: this.pixelSize,
+                                    color: this.brushColor
+                                }
+                                this.addPixel(newPixel);
+                            }
                         }
                     }
                 }
@@ -244,13 +226,15 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     deletePixel(x: number, y: number) {
-        const row = this.currentFrame[x];
+        const row = this.currentFrame && this.currentFrame[x];
         if (row instanceof Array) {
             delete row[y];
         }
     }
 
     addPixel(newPixel: IPixel) {
+        if (!this.currentFrame) this.currentFrame = [];
+
         const row = this.currentFrame[newPixel.pos.x];
         // If the row does not yet exist, create it with the new pixel
         // If the row does exist, update the pixel in that row
@@ -284,7 +268,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     clear() {
         const confirm = window.confirm('Are you sure you want to clear this scene?');
         if (!confirm) return;
-        if (this.currentFrame) {
+        if (this.currentFrame && this.asset) {
             const emptyFrame: TFrame = [];
             const currentFrameIndex = this.asset.frames.indexOf(this.currentFrame);
             this.asset.frames[currentFrameIndex] = emptyFrame;
@@ -293,7 +277,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     save(evt?: MouseEvent) {
-        if (this.currentFrame) {
+        if (this.currentFrame && this.asset) {
             this.assetService.saveAsset(this.asset).then(() => {
                 // Checking for the event ensures that the alert is only shown after the button is clicked
                 // as opposed to when this method is called as a background save
@@ -305,44 +289,66 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     prevFrame() {
-        const currentIndex = this.asset.frames.indexOf(this.currentFrame);
-        if (currentIndex > 0) {
-            this.currentFrame = this.asset.frames[currentIndex - 1];
+        if (this.currentFrame && this.asset) {
+            const currentIndex = this.asset.frames.indexOf(this.currentFrame);
+            if (currentIndex > 0) {
+                this.currentFrame = this.asset.frames[currentIndex - 1];
+            }
         }
     }
 
     nextFrame() {
-        const currentIndex = this.asset.frames.indexOf(this.currentFrame);
-        if (currentIndex < this.asset.frames.length - 1) {
-            this.currentFrame = this.asset.frames[currentIndex + 1];
+        if (this.currentFrame && this.asset) {
+            const currentIndex = this.asset.frames.indexOf(this.currentFrame);
+            if (currentIndex < this.asset.frames.length - 1) {
+                this.currentFrame = this.asset.frames[currentIndex + 1];
+            }
         }
     }
 
     copyFrame() {
-        this.assetService.copyFrame(this.currentFrame);
+        if (this.currentFrame) {
+            this.assetService.copyFrame(this.currentFrame);
+        }
     }
 
     pasteFrame() {
-        const frameToPaste = this.assetService.pasteFrame();
-        if (frameToPaste) {
-            const currentIndex = this.asset.frames.indexOf(this.currentFrame);
-            this.asset.frames[currentIndex] = frameToPaste;
-            this.currentFrame = this.asset.frames[currentIndex];
+        if (this.asset && this.currentFrame) {
+            const frameToPaste = this.assetService.pasteFrame();
+            if (frameToPaste) {
+                const currentIndex = this.asset.frames.indexOf(this.currentFrame);
+                this.asset.frames[currentIndex] = frameToPaste;
+                this.currentFrame = this.asset.frames[currentIndex];
+            }
         }
     }
 
     async createAsset() {
         const newAsset = await this.assetService.createAsset(this.assetType);
         this.asset = newAsset;
+        this.currentFrame = this.asset.frames[0];
+        this.numFrames = this.asset.frames.length;
+    }
+
+    selectDrawType(type: TDrawType) {
+        this.drawType = type;
     }
 
     async selectAssetType(type: TAssetType) {
         this.assetService.currentType = type;
         let loadedAsset: IAsset | null | undefined;
         loadedAsset = await this.assetService.getCurrentAsset();
+        this.assetType = type;
         if (loadedAsset) {
             this.asset = loadedAsset;
+        } else {
+            this.asset = {
+                id: Date.now(),
+                name: '',
+                frames: (this.assetType === 'background' || this.assetType === 'foreground') ? [[]] : Array(4).fill(null).map(() => [])
+            };
         }
-        this.assetType = type;
+        this.currentFrame = this.asset.frames[0];
+        this.numFrames = this.asset.frames.length;
     }
 }

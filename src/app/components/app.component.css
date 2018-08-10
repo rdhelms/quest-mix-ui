@@ -29,6 +29,13 @@
     justify-content: center;
 }
 
-.app__home, .app__profile, .app__game-screen, .app__game-editor {
+.app__home, .app__profile, .app__game-screen
+ {
     width: 100%;
+}
+
+.app__asset-editor {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }

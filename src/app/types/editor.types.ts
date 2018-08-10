@@ -1,3 +1,5 @@
+export type TDrawType = 'brush' | 'eraser' | 'colorPicker';
+
 export interface IPixel {
     pos: {
         x: number;
