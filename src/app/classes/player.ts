@@ -1,6 +1,6 @@
-import { IPosition, IPlayerSize, IPlayerOptions, TDirection } from "../types/player.types";
-import { Game } from "./game";
-import { Scene } from "./scene";
+import { IPosition, IPlayerSize, IPlayerOptions, TDirection } from '../types/player.types';
+import { Game } from './game';
+import { Scene } from './scene';
 
 export class Player {
     static defaults = {
@@ -15,7 +15,7 @@ export class Player {
             height: 10
         } as IPlayerSize,
         color: '#FFFFFF'
-    }
+    };
 
     pos: IPosition = Player.defaults.pos;
     direction: TDirection = Player.defaults.direction;
@@ -40,8 +40,8 @@ export class Player {
     }
 
     update() {
-        if (this.speed === 0) return;
-        
+        if (this.speed === 0) { return; }
+
         const newPos = {
             x: this.pos.x,
             y: this.pos.y

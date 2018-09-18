@@ -1,11 +1,11 @@
-import { Scene } from "./scene";
-import { IWorldOptions } from "../types/world.types";
+import { Scene } from './scene';
+import { IWorldOptions } from '../types/world.types';
 
 export class World {
     scenes: Scene[] = [{
         id: 0,
         objects: []
-    }]
+    }];
 
     constructor(
         options?: IWorldOptions

@@ -1,5 +1,5 @@
-import { Scene } from "../classes/scene";
+import { Scene } from '../classes/scene';
 
 export interface IWorldOptions {
-    scenes: Scene[]
+    scenes: Scene[];
 }

@@ -1,4 +1,4 @@
-import { TFrame } from "./editor.types";
+import { TFrame } from './editor.types';
 
 export type TAssetType = 'background' | 'foreground' | 'avatar' | 'entity' | 'object';
 

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "quest-creator": {
+    "quest-mix": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/quest-creator",
+            "outputPath": "dist/quest-mix",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -50,18 +50,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "quest-creator:build"
+            "browserTarget": "quest-mix:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "quest-creator:build:production"
+              "browserTarget": "quest-mix:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "quest-creator:build"
+            "browserTarget": "quest-mix:build"
           }
         },
         "test": {
@@ -95,7 +95,7 @@
         }
       }
     },
-    "quest-creator-e2e": {
+    "quest-mix-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -103,11 +103,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "quest-creator:serve"
+            "devServerTarget": "quest-mix:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "quest-creator:serve:production"
+              "devServerTarget": "quest-mix:serve:production"
             }
           }
         },
@@ -123,5 +123,5 @@
       }
     }
   },
-  "defaultProject": "quest-creator"
+  "defaultProject": "quest-mix"
 }

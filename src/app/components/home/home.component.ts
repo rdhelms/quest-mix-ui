@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit {
         if (loadedBackgrounds) {
             this.backgrounds = loadedBackgrounds;
         }
-        
+
         // Foregrounds
         const loadedForegrounds = await this.assetService.getAssetsByType('foreground');
         if (loadedForegrounds) {
@@ -57,11 +57,11 @@ export class HomeComponent implements OnInit {
 
     selectAsset(assetType: string, asset: any) {
         const nowEditing = {
-            type: (assetType === 'backgrounds') ? 'background' 
+            type: (assetType === 'backgrounds') ? 'background'
                 : (assetType === 'foregrounds') ? 'foreground'
                 : (assetType === 'objects') ? 'object'
-                : (assetType === 'entities') ? 'entity' 
-                : (assetType === 'avatars') ? 'avatar' 
+                : (assetType === 'entities') ? 'entity'
+                : (assetType === 'avatars') ? 'avatar'
                 : 'background',
             info: asset ? asset : undefined
         };

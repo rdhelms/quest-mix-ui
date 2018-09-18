@@ -17,7 +17,7 @@ export class AssetPreviewComponent implements OnChanges, AfterViewInit, OnDestro
     preview?: HTMLCanvasElement;
     previewRequest?: number;
     currentPreviewFrame?: TFrame;
-    animationCounter: number = 0;
+    animationCounter = 0;
 
     constructor() { }
 
@@ -50,17 +50,19 @@ export class AssetPreviewComponent implements OnChanges, AfterViewInit, OnDestro
             if (ctx && this.currentPreviewFrame instanceof Array && this.asset) {
                 ctx.clearRect(0, 0, preview.width, preview.height);
                 this.currentPreviewFrame.forEach((pixelRow) => {
-                    pixelRow instanceof Array && pixelRow.forEach((pixel) => {
-                        if (pixel) {
-                            ctx.fillStyle = pixel.color;
-                            ctx.fillRect(
-                                pixel.pos.x,
-                                pixel.pos.y,
-                                pixel.size,
-                                pixel.size
-                            );
-                        }
-                    });
+                    if (pixelRow instanceof Array) {
+                        pixelRow.forEach((pixel) => {
+                            if (pixel) {
+                                ctx.fillStyle = pixel.color;
+                                ctx.fillRect(
+                                    pixel.pos.x,
+                                    pixel.pos.y,
+                                    pixel.size,
+                                    pixel.size
+                                );
+                            }
+                        });
+                    }
                 });
                 if (this.animationCounter > 10) {
                     this.animationCounter = 0;

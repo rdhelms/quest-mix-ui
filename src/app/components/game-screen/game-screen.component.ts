@@ -58,7 +58,9 @@ export class GameScreenComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.game && this.game.quit();
+        if (this.game) {
+            this.game.quit();
+        }
     }
 
     movePlayer(dir: 'left' | 'right' | 'up' | 'down') {

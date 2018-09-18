@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Quest Creator';
+  title = 'Quest Mix';
   view = 'home';
   currentlyEditing?: any = {
       type: 'avatar',

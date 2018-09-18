@@ -1,16 +1,16 @@
-import { Player } from "./player";
-import { IGameOptions } from "../types/game.types";
-import { World } from "./world";
+import { Player } from './player';
+import { IGameOptions } from '../types/game.types';
+import { World } from './world';
 
 export class Game {
 
     canvas: CanvasRenderingContext2D;
     animationRequest?: number;
     startTime: number = Date.now();
-    speed: number = 1;
+    speed = 1;
     player?: Player;
     world?: World;
-    currentSceneId: number = 0;
+    currentSceneId = 0;
 
     constructor(options: IGameOptions) {
         this.canvas = options.canvas;
@@ -31,13 +31,19 @@ export class Game {
     }
 
     update() {
-        this.player && this.player.update();
+        if (this.player) {
+            this.player.update();
+        }
     }
 
     draw() {
         this.canvas.clearRect(0, 0, 400, 400);
-        this.player && this.player.draw(this.canvas);
-        this.world && this.world.drawScene(this.canvas, this.currentSceneId);
+        if (this.player) {
+            this.player.draw(this.canvas);
+        }
+        if (this.world) {
+            this.world.drawScene(this.canvas, this.currentSceneId);
+        }
     }
 
     run() {

@@ -37,7 +37,7 @@ export class AssetService {
     async saveAsset(newAsset: IAsset) {
         localStorage.setItem(this.currentType, JSON.stringify(newAsset));
         const assets = await this.getAssets();
-        let oldAssetIndex = assets.findIndex((asset) => {
+        const oldAssetIndex = assets.findIndex((asset) => {
             return asset.id === newAsset.id;
         });
         if (oldAssetIndex !== -1) {

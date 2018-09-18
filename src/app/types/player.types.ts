@@ -1,4 +1,4 @@
-import { Scene } from "../classes/scene";
+import { Scene } from '../classes/scene';
 
 export interface IPlayerSize {
     width: number;

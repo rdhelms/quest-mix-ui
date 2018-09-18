@@ -17,13 +17,13 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('assetEditorCanvas') canvasRef?: ElementRef;
 
     canvas?: HTMLCanvasElement;
-    pixelSize: number = 4;
+    pixelSize = 4;
     animationRequest?: number;
     mousePos: {
         x?: number;
         y?: number;
     } = {};
-    brushSize: number = 10;
+    brushSize = 10;
     brushColor = '#FFFFFF';
     paintingInterval?: number;
     drawType: TDrawType = 'brush';
@@ -49,13 +49,13 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
                 id: Date.now(),
                 name: '',
                 frames: (this.assetType === 'background' || this.assetType === 'foreground') ? [[]] : Array(4).fill(null).map(() => [])
-            }
+            };
         } else {
             this.asset = loadedAsset;
         }
 
-        this.currentFrame = this.asset.frames[0];
-        this.numFrames = this.asset.frames.length;
+        this.currentFrame = this.asset && this.asset.frames && this.asset.frames[0];
+        this.numFrames = this.asset && this.asset.frames && this.asset.frames.length;
     }
 
     ngAfterViewInit() {
@@ -97,17 +97,19 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
             if (ctx && this.currentFrame instanceof Array) {
                 ctx.beginPath();
                 this.currentFrame.forEach((pixelRow) => {
-                    pixelRow instanceof Array && pixelRow.forEach((pixel) => {
-                        if (pixel) {
-                            ctx.fillStyle = pixel.color;
-                            ctx.fillRect(
-                                pixel.pos.x,
-                                pixel.pos.y,
-                                pixel.size,
-                                pixel.size
-                            );
-                        }
-                    });
+                    if (pixelRow instanceof Array) {
+                        pixelRow.forEach((pixel) => {
+                            if (pixel) {
+                                ctx.fillStyle = pixel.color;
+                                ctx.fillRect(
+                                    pixel.pos.x,
+                                    pixel.pos.y,
+                                    pixel.size,
+                                    pixel.size
+                                );
+                            }
+                        });
+                    }
                 });
             }
         }
@@ -215,7 +217,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
                                     },
                                     size: this.pixelSize,
                                     color: this.brushColor
-                                }
+                                };
                                 this.addPixel(newPixel);
                             }
                         }
@@ -233,7 +235,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     addPixel(newPixel: IPixel) {
-        if (!this.currentFrame) this.currentFrame = [];
+        if (!this.currentFrame) { this.currentFrame = []; }
 
         const row = this.currentFrame[newPixel.pos.x];
         // If the row does not yet exist, create it with the new pixel
@@ -267,7 +269,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     clear() {
         const confirm = window.confirm('Are you sure you want to clear this scene?');
-        if (!confirm) return;
+        if (!confirm) { return; }
         if (this.currentFrame && this.asset) {
             const emptyFrame: TFrame = [];
             const currentFrameIndex = this.asset.frames.indexOf(this.currentFrame);
@@ -326,8 +328,8 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     async createAsset() {
         const newAsset = await this.assetService.createAsset(this.assetType);
         this.asset = newAsset;
-        this.currentFrame = this.asset.frames[0];
-        this.numFrames = this.asset.frames.length;
+        this.currentFrame = this.asset && this.asset.frames && this.asset.frames[0];
+        this.numFrames = this.asset && this.asset.frames && this.asset.frames.length;
     }
 
     selectDrawType(type: TDrawType) {
@@ -348,7 +350,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
                 frames: (this.assetType === 'background' || this.assetType === 'foreground') ? [[]] : Array(4).fill(null).map(() => [])
             };
         }
-        this.currentFrame = this.asset.frames[0];
-        this.numFrames = this.asset.frames.length;
+        this.currentFrame = this.asset && this.asset.frames && this.asset.frames[0];
+        this.numFrames = this.asset && this.asset.frames && this.asset.frames.length;
     }
 }
