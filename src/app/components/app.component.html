@@ -1,11 +1,16 @@
 <header class='app__header'>
     <h1>Quest Mix</h1>
     <div class='app__header-options'>
-        <button [class.active]='view === "home"' class='app__header-option' (click)='changeView("home")'>Home</button>
-        <button [class.active]='view === "profile"' class='app__header-option' (click)='changeView("profile")'>Profile</button>
-        <button [class.active]='view === "quests"' class='app__header-option' (click)='changeView("quests")'>Quests</button>
-        <button [class.active]='view === "worlds"' class='app__header-option' (click)='changeView("worlds")'>Worlds</button>
-        <button [class.active]='view === "assets"' class='app__header-option' (click)='changeView("assets")'>Assets</button>
+        <div>
+            <button [class.active]='view === "home"' class='app__header-option' (click)='changeView("home")'>Home</button>
+            <button [class.active]='view === "quests"' class='app__header-option' (click)='changeView("quests")'>Quests</button>
+            <button [class.active]='view === "worlds"' class='app__header-option' (click)='changeView("worlds")'>Worlds</button>
+            <button [class.active]='view === "assets"' class='app__header-option' (click)='changeView("assets")'>Assets</button>
+        </div>
+        <div>
+            <button [class.active]='view === "profile"' class='app__header-option' (click)='changeView("profile")'>Profile</button>
+            <app-session-manager></app-session-manager>
+        </div>
     </div>
 </header>
 

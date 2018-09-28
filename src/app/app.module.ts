@@ -9,6 +9,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { WorldEditorComponent } from './components/world-editor/world-editor.component';
 import { AssetEditorComponent } from './components/asset-editor/asset-editor.component';
 import { AssetPreviewComponent } from './components/asset-preview/asset-preview.component';
+import { SessionManagerComponent } from './components/session-manager/session-manager.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { AssetPreviewComponent } from './components/asset-preview/asset-preview.
     ProfileComponent,
     WorldEditorComponent,
     AssetEditorComponent,
-    AssetPreviewComponent
+    AssetPreviewComponent,
+    SessionManagerComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,12 @@
+<button 
+    *ngIf='!signedIn' 
+    class="session-manager__sign-in-btn"
+    (click)='signIn()'>
+    Sign In
+</button>
+<button 
+    *ngIf='signedIn' 
+    class="session-manager__sign-out-btn"
+    (click)='signOut()'>
+    Sign Out
+</button>
