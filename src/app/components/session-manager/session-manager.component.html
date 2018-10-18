@@ -1,12 +1,26 @@
 <button 
     *ngIf='!signedIn' 
-    class="session-manager__sign-in-btn"
-    (click)='signIn()'>
+    class='session-manager__sign-in-btn'
+    (click)='signInClicked()'>
     Sign In
 </button>
 <button 
     *ngIf='signedIn' 
-    class="session-manager__sign-out-btn"
+    class='session-manager__sign-out-btn'
     (click)='signOut()'>
     Sign Out
 </button>
+
+<div class='session-manager__sign-in-form' *ngIf='signingIn'>
+    <div class='session-manager__sign-in-info'>
+        <div class='session-manager__username-input'>
+            <label>Username: </label>
+            <input type='text' [(ngModel)]='username'>
+        </div>
+        <div class='session-manager__password-input'>
+            <label>Password: </label>
+            <input type='password' [(ngModel)]='password'>
+        </div>
+        <button (click)='submitSignIn()'>Submit</button>
+    </div>
+</div>
