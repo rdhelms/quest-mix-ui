@@ -15,7 +15,11 @@ export class UserService {
     ) { }
 
     getUsers() {
-        return this.http.get(`${environment.questMixApiUrl}/users`);
+        return this.http.get<IUser>(`${environment.questMixApiUrl}/users`);
+    }
+
+    createUser(userInfo: Partial<IUser>) {
+        return this.http.post<IUser>(`${environment.questMixApiUrl}/users`, userInfo);
     }
 
 }

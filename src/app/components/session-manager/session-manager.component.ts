@@ -8,12 +8,14 @@ import { UserService } from 'src/app/services/user.service';
     styleUrls: ['./session-manager.component.css']
 })
 export class SessionManagerComponent implements OnInit {
-    loading: boolean = false;
-    signingIn: boolean = false;
+    loading = false;
+    registering = false;
+    signingIn = false;
     signedIn = false;
-    invalidSignIn: boolean = false;
+    invalidSignIn = false;
     username?: string;
     password?: string;
+    email?: string;
 
     @Output() newView = new EventEmitter<'home' | 'profile' | 'player' | 'editor'>();
 
@@ -55,6 +57,34 @@ export class SessionManagerComponent implements OnInit {
         this.signedIn = false;
         this.userService.currentUser = undefined;
         this.newView.emit('home');
+    }
+
+    registerClicked() {
+        this.registering = true;
+    }
+
+    closeRegistration() {
+        this.registering = false;
+    }
+
+    submitRegistration() {
+        this.loading = true;
+        if (this.username && this.password && this.email) {
+            this.userService.createUser({
+                username: this.username,
+                password: this.password,
+                emails: [this.email]
+            }).subscribe((data) => {
+                this.registering = false;
+                this.signedIn = true;
+                this.username = undefined;
+                this.password = undefined;
+                this.email = undefined;
+                this.userService.currentUser = data;
+            });
+        } else {
+            this.invalidSignIn = true;
+        }
     }
 
 }

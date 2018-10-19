@@ -10,20 +10,51 @@
     (click)='signOut()'>
     Sign Out
 </button>
+<button 
+    *ngIf='!signedIn' 
+    class='session-manager__register-btn'
+    (click)='registerClicked()'>
+    Register
+</button>
 
-<div class='session-manager__sign-in-form' *ngIf='signingIn'>
-    <div class='session-manager__sign-in-info'>
-        <div class='session-manager__username-field'>
-            <label>Username: </label>
-            <input class='session-manager__form-input' type='text' [(ngModel)]='username'>
+<div class='session-manager__sign-in-form-container' *ngIf='signingIn'>
+    <div class='session-manager__sign-in-form'>
+        <div class='session-manager__sign-in-info'>
+            <div class='session-manager__username-field'>
+                <label>Username: </label>
+                <input class='session-manager__form-input' type='text' [(ngModel)]='username'>
+            </div>
+            <div class='session-manager__password-field'>
+                <label>Password: </label>
+                <input class='session-manager__form-input' type='password' [(ngModel)]='password'>
+            </div>
+            <div class='session-manager__form-btns'>
+                <button class='session-manager__form-btn' (click)='closeSignIn()'>Cancel</button>
+                <button class='session-manager__form-btn' (click)='submitSignIn()'>Submit</button>
+            </div>
         </div>
-        <div class='session-manager__password-field'>
-            <label>Password: </label>
-            <input class='session-manager__form-input' type='password' [(ngModel)]='password'>
-        </div>
-        <div class='session-manager__form-btns'>
-            <button class='session-manager__form-btn' (click)='closeSignIn()'>Cancel</button>
-            <button class='session-manager__form-btn' (click)='submitSignIn()'>Submit</button>
+    </div>
+</div>
+
+<div class='session-manager__register-form-container' *ngIf='registering'>
+    <div class='session-manager__register-form'>
+        <div class='session-manager__register-info'>
+            <div class='session-manager__username-field'>
+                <label>Username: </label>
+                <input class='session-manager__form-input' type='text' [(ngModel)]='username'>
+            </div>
+            <div class='session-manager__password-field'>
+                <label>Password: </label>
+                <input class='session-manager__form-input' type='password' [(ngModel)]='password'>
+            </div>
+            <div class='session-manager__email-field'>
+                <label>Email: </label>
+                <input class='session-manager__form-input' type='email' [(ngModel)]='email'>
+            </div>
+            <div class='session-manager__form-btns'>
+                <button class='session-manager__form-btn' (click)='closeRegistration()'>Cancel</button>
+                <button class='session-manager__form-btn' (click)='submitRegistration()'>Submit</button>
+            </div>
         </div>
     </div>
 </div>
