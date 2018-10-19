@@ -23,6 +23,10 @@ button:hover {
     color: white;
 }
 
+button:focus {
+    box-shadow: 0 0 4px 2px white, 0 0 4px 4px slategray;
+}
+
 button.active {
     background-color: steelblue;
     color: white;

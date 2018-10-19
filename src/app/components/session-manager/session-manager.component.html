@@ -13,14 +13,17 @@
 
 <div class='session-manager__sign-in-form' *ngIf='signingIn'>
     <div class='session-manager__sign-in-info'>
-        <div class='session-manager__username-input'>
+        <div class='session-manager__username-field'>
             <label>Username: </label>
-            <input type='text' [(ngModel)]='username'>
+            <input class='session-manager__form-input' type='text' [(ngModel)]='username'>
         </div>
-        <div class='session-manager__password-input'>
+        <div class='session-manager__password-field'>
             <label>Password: </label>
-            <input type='password' [(ngModel)]='password'>
+            <input class='session-manager__form-input' type='password' [(ngModel)]='password'>
         </div>
-        <button (click)='submitSignIn()'>Submit</button>
+        <div class='session-manager__form-btns'>
+            <button class='session-manager__form-btn' (click)='closeSignIn()'>Cancel</button>
+            <button class='session-manager__form-btn' (click)='submitSignIn()'>Submit</button>
+        </div>
     </div>
 </div>

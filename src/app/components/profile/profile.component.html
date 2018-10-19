@@ -1,11 +1,5 @@
 <ul class='profile__user-info'>
   <li class='profile__user-info-item'>
-    <label>Username: </label> <span>{{user?.username || 'none'}}</span>
-  </li>
-  <li class='profile__user-info-item'>
-    <label>Date Joined: </label> <span>{{user?.dateJoined || 'none'}}</span>
-  </li>
-  <li class='profile__user-info-item'>
-    <label>Avatar: </label> <span>{{user?.avatar || 'none'}}</span>
+    <label>Username: </label> <span>{{userService?.currentUser?.username || 'none'}}</span>
   </li>
 </ul>

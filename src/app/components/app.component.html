@@ -8,8 +8,8 @@
             <button [class.active]='view === "assets"' class='app__header-option' (click)='changeView("assets")'>Assets</button>
         </div>
         <div>
-            <button [class.active]='view === "profile"' class='app__header-option' (click)='changeView("profile")'>Profile</button>
-            <app-session-manager></app-session-manager>
+            <button *ngIf='userService.currentUser' [class.active]='view === "profile"' class='app__header-option' (click)='changeView("profile")'>Profile</button>
+            <app-session-manager (newView)='changeView($event)'></app-session-manager>
         </div>
     </div>
 </header>

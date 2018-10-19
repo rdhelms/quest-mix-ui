@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { SessionService } from 'src/app/services/session.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
     selector: 'app-session-manager',
@@ -14,8 +15,11 @@ export class SessionManagerComponent implements OnInit {
     username?: string;
     password?: string;
 
+    @Output() newView = new EventEmitter<'home' | 'profile' | 'player' | 'editor'>();
+
     constructor(
-        private sessionService: SessionService
+        private sessionService: SessionService,
+        private userService: UserService
     ) { }
 
     ngOnInit() {
@@ -23,6 +27,10 @@ export class SessionManagerComponent implements OnInit {
 
     signInClicked() {
         this.signingIn = true;
+    }
+
+    closeSignIn() {
+        this.signingIn = false;
     }
 
     submitSignIn() {
@@ -36,6 +44,7 @@ export class SessionManagerComponent implements OnInit {
                 this.signedIn = true;
                 this.username = undefined;
                 this.password = undefined;
+                this.userService.currentUser = data;
             });
         } else {
             this.invalidSignIn = true;
@@ -44,6 +53,8 @@ export class SessionManagerComponent implements OnInit {
 
     signOut() {
         this.signedIn = false;
+        this.userService.currentUser = undefined;
+        this.newView.emit('home');
     }
 
 }
