@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { IAsset, TAssetType } from '../types/asset.types';
 import { TFrame } from '../types/editor.types';
+import { BackgroundService } from './background.service';
+import { ForegroundService } from './foreground.service';
+import { AvatarService } from './avatar.service';
+import { EntityService } from './entity.service';
+import { ObjectService } from './object.service';
 
 @Injectable({
     providedIn: 'root'
@@ -10,11 +15,23 @@ export class AssetService {
     currentType: TAssetType = 'background';
     currentAsset?: IAsset;
 
-    constructor() { }
+    constructor(
+        private backgroundService: BackgroundService,
+        private foregroundService: ForegroundService,
+        private avatarService: AvatarService,
+        private entityService: EntityService,
+        private objectService: ObjectService
+    ) { }
 
     async getAssetsByType(assetType: TAssetType): Promise<IAsset[]> {
-        const assets = JSON.parse(localStorage.getItem(`${assetType}List`) || '[]');
-        return (assets || []);
+        const assets =
+            assetType === 'background' ? this.backgroundService.getBackgrounds() :
+            assetType === 'foreground' ? this.foregroundService.getForegrounds() :
+            assetType === 'avatar' ? this.avatarService.getAvatars() :
+            assetType === 'entity' ? this.entityService.getEntities() :
+            this.objectService.getObjects();
+
+        return await assets.toPromise() || [];
     }
 
     async getAssets(): Promise<IAsset[]> {
