@@ -35,8 +35,13 @@ export class AssetService {
     }
 
     async getAssets(): Promise<IAsset[]> {
-        const assets = JSON.parse(localStorage.getItem(`${this.currentType}List`) || '[]');
-        return (assets || []);
+        const assets =
+            this.currentType === 'background' ? this.backgroundService.getBackgrounds() :
+            this.currentType === 'foreground' ? this.foregroundService.getForegrounds() :
+            this.currentType === 'avatar' ? this.avatarService.getAvatars() :
+            this.currentType === 'entity' ? this.entityService.getEntities() :
+            this.objectService.getObjects();
+        return await assets.toPromise() || [];
     }
 
     async createAsset(type: TAssetType) {
@@ -52,17 +57,33 @@ export class AssetService {
     }
 
     async saveAsset(newAsset: IAsset) {
-        localStorage.setItem(this.currentType, JSON.stringify(newAsset));
-        const assets = await this.getAssets();
-        const oldAssetIndex = assets.findIndex((asset) => {
-            return asset.id === newAsset.id;
-        });
-        if (oldAssetIndex !== -1) {
-            assets[oldAssetIndex] = newAsset;
-        } else {
-            assets.push(newAsset);
+        try {
+            console.log('trying');
+            const existingAssetRequest =
+            this.currentType === 'background' ? this.backgroundService.getBackgroundById(newAsset.id) :
+            this.currentType === 'foreground' ? this.foregroundService.getForegroundById(newAsset.id) :
+            this.currentType === 'avatar' ? this.avatarService.getAvatarById(newAsset.id) :
+            this.currentType === 'entity' ? this.entityService.getEntityById(newAsset.id) :
+            this.objectService.getObjectById(newAsset.id);
+            await existingAssetRequest.toPromise();
+            this.currentType === 'background' ? this.backgroundService.updateBackground(newAsset) :
+            this.currentType === 'foreground' ? this.foregroundService.updateForeground(newAsset) :
+            this.currentType === 'avatar' ? this.avatarService.updateAvatar(newAsset) :
+            this.currentType === 'entity' ? this.entityService.updateEntity(newAsset) :
+            this.objectService.updateObject(newAsset);
+            console.log('end of trying');
+        } catch (err) {
+            console.log('catching');
+            const createRequest =
+                this.currentType === 'background' ? this.backgroundService.createBackground(newAsset) :
+                this.currentType === 'foreground' ? this.foregroundService.createForeground(newAsset) :
+                this.currentType === 'avatar' ? this.avatarService.createAvatar(newAsset) :
+                this.currentType === 'entity' ? this.entityService.createEntity(newAsset) :
+                this.objectService.createObject(newAsset);
+            const result = await createRequest.toPromise();
+            console.log(result);
+            console.log('end of catching');
         }
-        localStorage.setItem(`${this.currentType}List`, JSON.stringify(assets));
     }
 
     async getAssetById(id: number) {
