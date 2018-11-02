@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
     objects: IAsset[] = [];
     entities: IAsset[] = [];
     avatars: IAsset[] = [];
+    loading = true;
 
     constructor(
         private assetService: AssetService
@@ -24,40 +25,52 @@ export class HomeComponent implements OnInit {
 
     async ngOnInit() {
         // Backgrounds
-        const loadedBackgrounds = await this.assetService.getAssetsByType('background');
-        if (loadedBackgrounds) {
-            this.backgrounds = loadedBackgrounds;
+        const loadedBackgrounds = this.assetService.getAssetsByType('background');
+        const loadedForegrounds = this.assetService.getAssetsByType('foreground');
+        const loadedObjects = this.assetService.getAssetsByType('object');
+        const loadedEntities = this.assetService.getAssetsByType('entity');
+        const loadedAvatars = this.assetService.getAssetsByType('avatar');
+
+        const result = await Promise.all([
+            loadedBackgrounds,
+            loadedForegrounds,
+            loadedObjects,
+            loadedEntities,
+            loadedAvatars
+        ]);
+
+        if (result[0]) {
+            this.backgrounds = result[0];
         }
 
         // Foregrounds
-        const loadedForegrounds = await this.assetService.getAssetsByType('foreground');
-        if (loadedForegrounds) {
-            this.foregrounds = loadedForegrounds;
+        if (result[1]) {
+            this.foregrounds = result[1];
         }
 
         // Objects
-        const loadedObjects = await this.assetService.getAssetsByType('object');
-        if (loadedObjects) {
-            this.objects = loadedObjects;
+        if (result[2]) {
+            this.objects = result[2];
         }
 
         // Entities
-        const loadedEntities = await this.assetService.getAssetsByType('entity');
-        if (loadedEntities) {
-            this.entities = loadedEntities;
+        if (result[3]) {
+            this.entities = result[3];
         }
 
         // Avatars
-        const loadedAvatars = await this.assetService.getAssetsByType('avatar');
-        if (loadedAvatars) {
-            this.avatars = loadedAvatars;
+        if (result[4]) {
+            this.avatars = result[4];
         }
 
+        this.loading = false;
     }
 
     selectAsset(assetType: string, asset: any) {
         const nowEditing = {
-            type: (assetType === 'backgrounds') ? 'background'
+            type: (assetType === 'quests') ? 'quest'
+                : (assetType === 'worlds') ? 'world'
+                : (assetType === 'backgrounds') ? 'background'
                 : (assetType === 'foregrounds') ? 'foreground'
                 : (assetType === 'objects') ? 'object'
                 : (assetType === 'entities') ? 'entity'

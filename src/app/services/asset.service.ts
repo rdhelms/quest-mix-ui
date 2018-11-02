@@ -58,32 +58,38 @@ export class AssetService {
 
     async saveAsset(newAsset: IAsset) {
         try {
-            console.log('trying');
             const existingAssetRequest =
-            this.currentType === 'background' ? this.backgroundService.getBackgroundById(newAsset.id) :
-            this.currentType === 'foreground' ? this.foregroundService.getForegroundById(newAsset.id) :
-            this.currentType === 'avatar' ? this.avatarService.getAvatarById(newAsset.id) :
-            this.currentType === 'entity' ? this.entityService.getEntityById(newAsset.id) :
-            this.objectService.getObjectById(newAsset.id);
+                this.currentType === 'background' ? this.backgroundService.getBackgroundById(newAsset.id) :
+                this.currentType === 'foreground' ? this.foregroundService.getForegroundById(newAsset.id) :
+                this.currentType === 'avatar' ? this.avatarService.getAvatarById(newAsset.id) :
+                this.currentType === 'entity' ? this.entityService.getEntityById(newAsset.id) :
+                this.objectService.getObjectById(newAsset.id);
             await existingAssetRequest.toPromise();
-            this.currentType === 'background' ? this.backgroundService.updateBackground(newAsset) :
-            this.currentType === 'foreground' ? this.foregroundService.updateForeground(newAsset) :
-            this.currentType === 'avatar' ? this.avatarService.updateAvatar(newAsset) :
-            this.currentType === 'entity' ? this.entityService.updateEntity(newAsset) :
-            this.objectService.updateObject(newAsset);
-            console.log('end of trying');
+            const updateAssetRequest = this.currentType === 'background' ? this.backgroundService.updateBackground(newAsset) :
+                this.currentType === 'foreground' ? this.foregroundService.updateForeground(newAsset) :
+                this.currentType === 'avatar' ? this.avatarService.updateAvatar(newAsset) :
+                this.currentType === 'entity' ? this.entityService.updateEntity(newAsset) :
+                this.objectService.updateObject(newAsset);
+            await updateAssetRequest.toPromise();
         } catch (err) {
-            console.log('catching');
             const createRequest =
                 this.currentType === 'background' ? this.backgroundService.createBackground(newAsset) :
                 this.currentType === 'foreground' ? this.foregroundService.createForeground(newAsset) :
                 this.currentType === 'avatar' ? this.avatarService.createAvatar(newAsset) :
                 this.currentType === 'entity' ? this.entityService.createEntity(newAsset) :
                 this.objectService.createObject(newAsset);
-            const result = await createRequest.toPromise();
-            console.log(result);
-            console.log('end of catching');
+            await createRequest.toPromise();
         }
+    }
+
+    async deleteAsset(asset: IAsset) {
+        const deleteRequest =
+            this.currentType === 'background' ? this.backgroundService.deleteBackground(asset.id) :
+            this.currentType === 'foreground' ? this.foregroundService.deleteForeground(asset.id) :
+            this.currentType === 'avatar' ? this.avatarService.deleteAvatar(asset.id) :
+            this.currentType === 'entity' ? this.entityService.deleteEntity(asset.id) :
+            this.objectService.deleteObject(asset.id);
+        await deleteRequest.toPromise();
     }
 
     async getAssetById(id: number) {

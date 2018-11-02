@@ -1,4 +1,4 @@
-<div class='home__lists'>
+<div *ngIf='!loading' class='home__lists'>
 
   <ul *ngFor='let assetType of ["quests", "worlds", "backgrounds", "foregrounds", "objects", "entities", "avatars"]' class='home__list'>
     <h3 class='home__list-header' (click)='selectAsset(assetType)'>{{assetType | uppercase}}</h3>
@@ -8,4 +8,8 @@
     </li>
   </ul>
 
+</div>
+
+<div class='home__loading' *ngIf='loading'>
+  Loading...
 </div>

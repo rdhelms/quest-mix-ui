@@ -4,13 +4,14 @@
 <div class='asset-editor__top-toolbar'>
     <div>
         <label> Name: </label>
-        <input *ngIf='asset' class='asset-editor__name-input' type='text' [(ngModel)]='asset.name'>
+        <input *ngIf='asset' class='asset-editor__name-input' type='text' [(ngModel)]='asset!.name'>
     </div>
+    <button class='asset-editor__delete-btn' (click)='delete()'>Delete</button>
+    <button class='asset-editor__save-btn' (click)='save($event)'>Save</button>
     <button (click)='createAsset()'> Create New {{ assetType && (assetType[0].toUpperCase() + assetType.slice(1)) }} </button>
 </div>
 <div class='asset-editor__tools'>
     <button class='asset-editor__clear-btn' (click)='clear()'>Clear</button>
-    <button class='asset-editor__save-btn' (click)='save($event)'>Save</button>
     <button class='asset-editor__brush-btn' [class.active]='drawType === "brush"' (click)='selectDrawType("brush")'>Brush</button>
     <button class='asset-editor__erase-btn' [class.active]='drawType === "eraser"' (click)='selectDrawType("eraser")'>Erase</button>
     <button class='asset-editor__color-picker-btn' [class.active]='drawType === "colorPicker"' (click)='selectDrawType("colorPicker")'>Color Picker</button>
@@ -30,14 +31,13 @@
         [width]='canvasSize' 
         [height]='canvasSize'
         tabIndex='1'
-        (keyup)='handleKeyUp($event)'
         (mousedown)='handleMouseDown($event)'
         (mouseup)='handleMouseUp()'
         (mousemove)='handleMouseMove($event)'
         (mouseleave)='handleMouseLeave()'
     ></canvas>
-    <div *ngIf='numFrames > 1' class='asset-editor__sprite-options'>
-        <p>Frame {{ asset.frames.indexOf(currentFrame) + 1 }} of {{ asset.frames.length }}</p>
+    <div *ngIf='numFrames! > 1' class='asset-editor__sprite-options'>
+        <p>Frame {{ asset!.frames.indexOf(currentFrame) + 1 }} of {{ asset!.frames.length }}</p>
         <button (click)='prevFrame()'> <- </button> 
         <button (click)='nextFrame()'> -> </button>
         <button (click)='copyFrame()'> Copy </button>

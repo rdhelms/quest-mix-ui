@@ -19,14 +19,14 @@ export class AppComponent {
         public userService: UserService
     ) { }
 
-    changeView(newView: 'home' | 'profile' | 'player' | 'editor') {
+    changeView(newView: 'home' | 'profile' | 'quests' | 'worlds' | 'assets') {
         this.view = newView;
     }
 
     selectedAsset(asset: any) {
         if (asset) {
             this.currentlyEditing = asset;
-            this.changeView('editor');
+            this.changeView('assets');
         }
     }
 }

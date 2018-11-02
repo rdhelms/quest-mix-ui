@@ -290,6 +290,14 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    delete() {
+        if (this.currentFrame && this.asset) {
+            this.assetService.deleteAsset(this.asset).then(() => {
+                alert('Deleted!');
+            });
+        }
+    }
+
     prevFrame() {
         if (this.currentFrame && this.asset) {
             const currentIndex = this.asset.frames.indexOf(this.currentFrame);
