@@ -1,10 +1,3 @@
-
-.session-manager__sign-in-btn,
-.session-manager__sign-out-btn,
-.session-manager__register-btn {
-    margin-right: 0.5rem;
-}
-
 .session-manager__sign-in-form-container,
 .session-manager__register-form-container {
     position: fixed;
@@ -29,7 +22,6 @@
     color: black;
     border-radius: 10px;
     border: 4px solid slategray;
-    width: 50%;
     padding: 2rem;
 }
 
@@ -37,6 +29,7 @@
 .session-manager__password-field,
 .session-manager__email-field {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     margin: 0.5rem 0;

@@ -2,6 +2,9 @@ import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { Component, Input } from '@angular/core';
 import { TAssetType } from '../types/asset.types';
+import { SessionManagerComponent } from './session-manager/session-manager.component';
+import { FormsModule } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 @Component({selector: 'app-home', template: ''})
 class HomeStubComponent {}
@@ -31,7 +34,12 @@ describe('AppComponent', () => {
         ProfileStubComponent,
         GameScreenStubComponent,
         WorldEditorStubComponent,
-        AssetEditorStubComponent
+        AssetEditorStubComponent,
+        SessionManagerComponent
+      ],
+      imports: [
+        FormsModule,
+        HttpClientTestingModule
       ]
     }).compileComponents();
   }));

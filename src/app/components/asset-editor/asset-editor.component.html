@@ -25,6 +25,13 @@
     </div>
 </div>
 <div class='asset-editor__sprite-editor'>
+    <div *ngIf='numFrames! > 1' class='asset-editor__sprite-options'>
+        <p>Frame {{ asset!.frames.indexOf(currentFrame) + 1 }} of {{ asset!.frames.length }}</p>
+        <button (click)='prevFrame()'> <- </button> 
+        <button (click)='nextFrame()'> -> </button>
+        <button (click)='copyFrame()'> Copy </button>
+        <button (click)='pasteFrame()'> Paste </button>
+    </div>
     <canvas 
         #assetEditorCanvas 
         class='asset-editor__canvas' 
@@ -36,17 +43,10 @@
         (mousemove)='handleMouseMove($event)'
         (mouseleave)='handleMouseLeave()'
     ></canvas>
-    <div *ngIf='numFrames! > 1' class='asset-editor__sprite-options'>
-        <p>Frame {{ asset!.frames.indexOf(currentFrame) + 1 }} of {{ asset!.frames.length }}</p>
-        <button (click)='prevFrame()'> <- </button> 
-        <button (click)='nextFrame()'> -> </button>
-        <button (click)='copyFrame()'> Copy </button>
-        <button (click)='pasteFrame()'> Paste </button>
-        <p>Preview</p>
-        <app-asset-preview
-            class='asset-editor__preview'
-            [canvasSize]='canvasSize'
-            [asset]='asset'
-        ></app-asset-preview>
-    </div>
+    <app-asset-preview
+        *ngIf='numFrames! > 1'
+        class='asset-editor__preview'
+        [canvasSize]='canvasSize'
+        [asset]='asset'
+    ></app-asset-preview>
 </div>
