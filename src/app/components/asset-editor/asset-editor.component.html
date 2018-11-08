@@ -1,5 +1,5 @@
 <nav class='asset-editor__nav'>
-    <button *ngFor='let type of ["world", "background", "foreground", "object", "entity", "avatar"]' [class.active]='assetType === type' (click)='selectAssetType(type)'>{{type | uppercase}}</button>
+    <button *ngFor='let type of ["background", "foreground", "object", "entity", "avatar"]' [class.active]='assetType === type' (click)='selectAssetType(type)'>{{type | uppercase}}</button>
 </nav>
 <div class='asset-editor__top-toolbar'>
     <div>

@@ -1,3 +1,120 @@
-<p>
-  world-editor works!
-</p>
+<div class="world-editor__world-options">
+    <h2>World Options</h2>
+    <div>
+        <p>Name: Some World</p>
+        <p>Starting Scene: Some Scene</p>
+        <p>Player Avatar: Some Avatar</p>
+        <p>Game Speed: Normal</p>
+    </div>
+    <h3>Controls</h3>
+    <div>
+        <p>Arrows: Move player</p>
+        <p>Spacebar / Alphanumeric keys: Open text input</p>
+        <p>Enter: Submit text input / Clear text dialog</p>
+        <p>Escape: Open Menu</p>
+    </div>
+</div>
+<div class="world-editor__world-state">
+    <h2>Initial World State</h2>
+    <h3>Player</h3>
+    <div>
+        <p>Position: Some Scene, (x,y)</p>
+        <p>Action: Stand</p>
+    </div>
+    <h3>Intro</h3>
+    <div>
+        <p>
+            Here you can provide information for players when they begin a quest
+            in your world.
+        </p>
+    </div>
+
+    <h3>Custom</h3>
+    <div>
+        <p>
+            Here you can specify values that are relevant in many scenes throughout
+            your world.
+        </p>
+        <p>
+            For example, if you set a value of "monsterLocation" to "house", then in
+            a scene you could check the value of "monsterLocation" while setting its initial
+            state or processing an event.
+        </p>
+        <p>
+            Any world event or scene event can access or change a world state
+            variable.
+        </p>
+    </div>
+</div>
+<div class="world-editor__world-events">
+    <h2>World Events</h2>
+    <div>
+        <p>Here you can handle events that may occur in your world.</p>
+        <p>Examples: </p>
+        <p>
+            Randomly teleport the player's avatar every 5 minutes. 
+        </p>
+        <p>
+            When player's score reaches 100, set world variable "danger" to "will robinson"
+        </p>
+    </div>
+</div>
+<div class="world-editor__scene-options">
+    <h2>Scene Options</h2>
+    <div>
+        <p>Name: Some Scene</p>
+    </div>
+</div>
+<div class="world-editor__scene-state">
+    <h2>Initial Scene State</h2>
+    <h3>Background</h3>
+    <div>
+        <p>Name: Some Background</p>
+    </div>
+    <h3>Foreground</h3>
+    <div>
+        <p>Name: Some Foreground</p>
+    </div>
+    <h3>Objects</h3>
+    <div>
+        <p>Name: Some Object</p>
+        <p>Position: (x,y)</p>
+        <p>Speed: Normal</p>
+    </div>
+    <h3>Entities</h3>
+    <div>
+        <p>Name: Some Entity</p>
+        <p>Position: (x,y)</p>
+        <p>Speed: Normal</p>
+        <p>Action: Stand</p>
+    </div>
+
+    <h3>Custom</h3>
+    <div>
+        <p>
+            Here you can specify additional values that are relevant to this scene.
+        </p>
+        <p>Only this scene can access or change these variables.</p>
+    </div>
+</div>
+<div class="world-editor__scene-events">
+    <h2>Scene Events</h2>
+    <div>
+        <p>Here you can handle events that may occur in your scene.</p>
+        <p>
+            Examples:
+        </p>
+        <p>
+            When player collides with (entity / object / collision-map-A), teleport to "Some Other Scene, (x,y)"
+        </p>
+        <p>
+            When player types (look|inspect|examine) & (tree|branches|up), display "You see a nest in the tree's branches."
+        </p>
+        <p>
+            When a player types (take) & (sword), display "You pick up the sword" and increase score by 5 points. 
+        </p>
+        <p>
+            After 5 seconds, if "monsterLocation" is "house", change "Monster" entity's behavior to "chase".
+        </p>
+    </div>
+</div>

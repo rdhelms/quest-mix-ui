@@ -7,7 +7,7 @@ import { UserService } from '../services/user.service';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    view = 'home';
+    view = 'worlds';
     currentlyEditing?: any = {
         type: 'avatar',
         info: {
