@@ -17,7 +17,7 @@ describe('AssetEditorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ 
+      imports: [
         FormsModule,
         HttpClientTestingModule
        ],
