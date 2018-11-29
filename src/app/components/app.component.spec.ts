@@ -6,19 +6,19 @@ import { SessionManagerComponent } from './session-manager/session-manager.compo
 import { FormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-@Component({selector: 'app-home', template: ''})
+@Component({selector: 'home', template: ''})
 class HomeStubComponent {}
 
-@Component({selector: 'app-profile', template: ''})
+@Component({selector: 'profile', template: ''})
 class ProfileStubComponent {}
 
-@Component({selector: 'app-game-screen', template: ''})
+@Component({selector: 'game-screen', template: ''})
 class GameScreenStubComponent {}
 
-@Component({selector: 'app-world-editor', template: ''})
+@Component({selector: 'world-editor', template: ''})
 class WorldEditorStubComponent {}
 
-@Component({selector: 'app-asset-editor', template: ''})
+@Component({selector: 'asset-editor', template: ''})
 class AssetEditorStubComponent {
   @Input() canvasSize!: number;
   @Input() assetType!: TAssetType;

@@ -43,10 +43,10 @@
         (mousemove)='handleMouseMove($event)'
         (mouseleave)='handleMouseLeave()'
     ></canvas>
-    <app-asset-preview
+    <asset-preview
         *ngIf='numFrames! > 1'
         class='asset-editor__preview'
         [canvasSize]='canvasSize'
         [asset]='asset'
-    ></app-asset-preview>
+    ></asset-preview>
 </div>

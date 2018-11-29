@@ -1,7 +1,24 @@
 import { Scene } from './scene';
 import { IWorldOptions } from '../types/world.types';
+import { TDirection } from '../types/player.types';
 
 export class World {
+    name = 'No Name';
+    player = {
+        speed: 0,
+        size: {
+            width: 5,
+            height: 10
+        },
+        color: '#FFFFFF',
+        direction: 'down' as TDirection,
+        sceneId: 0,
+        pos: {
+            x: 0,
+            y: 0
+        }
+    };
+
     scenes: Scene[] = [{
         id: 0,
         objects: []

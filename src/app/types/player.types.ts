@@ -13,10 +13,10 @@ export interface IPosition {
 export type TDirection = 'left' | 'right' | 'up' | 'down';
 
 export interface IPlayerOptions {
-    pos?: IPosition;
-    direction?: TDirection;
-    speed?: number;
-    size?: IPlayerSize;
-    color?: string;
-    currentScene?: Scene;
+    pos: IPosition;
+    direction: TDirection;
+    speed: number;
+    size: IPlayerSize;
+    color: string;
+    currentScene: Scene;
 }

@@ -9,21 +9,21 @@
         </div>
         <div>
             <button *ngIf='userService.currentUser' [class.active]='view === "profile"' class='app__header-option' (click)='changeView("profile")'>Profile</button>
-            <app-session-manager (newView)='changeView($event)'></app-session-manager>
+            <session-manager (newView)='changeView($event)'></session-manager>
         </div>
     </div>
 </header>
 
 <main class='app__main'>
-    <app-home *ngIf='view === "home"' class='app__home' (selectedAsset)='selectedAsset($event)'></app-home>
-    <app-profile *ngIf='view === "profile"' class='app__profile'></app-profile>
-    <app-game-screen *ngIf='view === "quests"' class='app__game-screen'></app-game-screen>
-    <app-world-editor *ngIf='view === "worlds"' class='app__world-editor'></app-world-editor>
-    <app-asset-editor 
+    <home *ngIf='view === "home"' class='app__home' (selectedAsset)='selectedAsset($event)'></home>
+    <profile *ngIf='view === "profile"' class='app__profile'></profile>
+    <game-screen *ngIf='view === "quests"' class='app__game-screen'></game-screen>
+    <world-editor *ngIf='view === "worlds"' class='app__world-editor'></world-editor>
+    <asset-editor 
         *ngIf='view === "assets"'
         class='app__asset-editor'
         [canvasSize]='600'
         [assetType]='currentlyEditing.type'
         [assetId]='currentlyEditing.info?.id'
-    ></app-asset-editor>
+    ></asset-editor>
 </main>

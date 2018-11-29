@@ -8,8 +8,8 @@ export class Game {
     animationRequest?: number;
     startTime: number = Date.now();
     speed = 1;
-    player?: Player;
-    world?: World;
+    player: Player;
+    world: World;
     currentSceneId = 0;
 
     constructor(options: IGameOptions) {
@@ -19,12 +19,6 @@ export class Game {
     }
 
     start() {
-        const currentScene = this.world && this.world.scenes.find((scene) => scene.id === this.currentSceneId );
-        const player = new Player({
-            currentScene
-        });
-        this.player = player;
-
         this.animationRequest = window.requestAnimationFrame(() => {
             this.run();
         });
@@ -37,7 +31,7 @@ export class Game {
     }
 
     draw() {
-        this.canvas.clearRect(0, 0, 400, 400);
+        this.canvas.clearRect(0, 0, 600, 600);
         if (this.player) {
             this.player.draw(this.canvas);
         }

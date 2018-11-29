@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
 import { IAsset } from '../../types/asset.types';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-@Component({selector: 'app-asset-preview', template: ''})
+@Component({selector: 'asset-preview', template: ''})
 class AssetPreviewStubComponent {
   @Input() canvasSize!: number;
   @Input() asset?: IAsset;

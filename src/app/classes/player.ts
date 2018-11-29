@@ -1,38 +1,23 @@
 import { IPosition, IPlayerSize, IPlayerOptions, TDirection } from '../types/player.types';
 import { Game } from './game';
 import { Scene } from './scene';
+import { World } from './world';
 
 export class Player {
-    static defaults = {
-        pos: {
-            x: 0,
-            y: 0
-        } as IPosition,
-        direction: 'down' as TDirection,
-        speed: 0,
-        size: {
-            width: 5,
-            height: 10
-        } as IPlayerSize,
-        color: '#FFFFFF'
-    };
-
-    pos: IPosition = Player.defaults.pos;
-    direction: TDirection = Player.defaults.direction;
-    speed: number = Player.defaults.speed;
-    size: IPlayerSize = Player.defaults.size;
-    color: string = Player.defaults.color;
+    pos: IPosition;
+    direction: TDirection;
+    speed: number;
+    size: IPlayerSize;
+    color: string;
     currentScene?: Scene;
 
-    constructor(options?: IPlayerOptions) {
-        if (options) {
-            this.pos = options.pos || this.pos;
-            this.direction = options.direction || this.direction;
-            this.speed = options.speed || this.speed;
-            this.size = options.size || this.size;
-            this.color = options.color || this.color;
-            this.currentScene = options.currentScene;
-        }
+    constructor(options: IPlayerOptions) {
+        this.pos = options.pos;
+        this.direction = options.direction;
+        this.speed = options.speed;
+        this.size = options.size;
+        this.color = options.color;
+        this.currentScene = options.currentScene;
     }
 
     turn(dir: TDirection) {
@@ -58,9 +43,9 @@ export class Player {
 
         if (
             newPos.x >= 0 &&
-            (newPos.x + this.size.width) <= 400 &&
+            (newPos.x + this.size.width) <= 600 &&
             newPos.y >= 0 &&
-            (newPos.y + this.size.height) <= 400 &&
+            (newPos.y + this.size.height) <= 600 &&
             !this.checkCollisions(newPos)
         ) {
             this.pos = newPos;

@@ -3,7 +3,7 @@ import { SessionService } from 'src/app/services/session.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-    selector: 'app-session-manager',
+    selector: 'session-manager',
     templateUrl: './session-manager.component.html',
     styleUrls: ['./session-manager.component.css']
 })

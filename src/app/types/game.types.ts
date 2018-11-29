@@ -3,6 +3,6 @@ import { Player } from '../classes/player';
 
 export interface IGameOptions {
     canvas: CanvasRenderingContext2D;
-    player?: Player;
-    world?: World;
+    player: Player;
+    world: World;
 }

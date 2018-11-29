@@ -4,7 +4,7 @@ import { AssetService } from '../../services/asset.service';
 import { IAsset, TAssetType } from '../../types/asset.types';
 
 @Component({
-    selector: 'app-asset-editor',
+    selector: 'asset-editor',
     templateUrl: './asset-editor.component.html',
     styleUrls: ['./asset-editor.component.css']
 })

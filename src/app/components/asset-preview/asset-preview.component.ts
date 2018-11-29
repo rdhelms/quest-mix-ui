@@ -3,7 +3,7 @@ import { TFrame } from '../../types/editor.types';
 import { IAsset } from '../../types/asset.types';
 
 @Component({
-    selector: 'app-asset-preview',
+    selector: 'asset-preview',
     templateUrl: './asset-preview.component.html',
     styleUrls: ['./asset-preview.component.css']
 })

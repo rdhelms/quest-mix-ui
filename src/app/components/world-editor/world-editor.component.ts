@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-world-editor',
+  selector: 'world-editor',
   templateUrl: './world-editor.component.html',
   styleUrls: ['./world-editor.component.css']
 })

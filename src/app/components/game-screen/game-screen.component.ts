@@ -3,9 +3,10 @@ import { Game } from '../../classes/game';
 import { WorldService } from '../../services/world.service';
 import { GameService } from '../../services/game.service';
 import { World } from '../../classes/world';
+import { Player } from 'src/app/classes/player';
 
 @Component({
-    selector: 'app-game-screen',
+    selector: 'game-screen',
     templateUrl: './game-screen.component.html',
     styleUrls: ['./game-screen.component.css']
 })
@@ -28,27 +29,55 @@ export class GameScreenComponent implements OnInit, AfterViewInit, OnDestroy {
         const ctx = canvas.getContext('2d');
 
         if (ctx) {
+            // If we're resuming a game that was already in progress
             const loadedGame = await this.gameService.getGame();
             if (loadedGame && loadedGame.world) {
+                const currentScene = loadedGame.world.scenes.find((scene) => scene.id === loadedGame.world.player.sceneId);
+                if (!currentScene) {
+                    throw new Error(`No scene found in world ${loadedGame.world.name}`);
+                }
                 this.game = new Game({
                     canvas: ctx,
                     world: new World({
-                        scenes: loadedGame.world.scenes
+                        ...loadedGame.world
+                    }),
+                    player: new Player({
+                        ...loadedGame.player,
+                        currentScene
                     })
                 });
             } else {
+                // If we're starting a new game in an existing world
                 const loadedWorld = await this.worldService.getWorld();
                 if (loadedWorld) {
+                    const currentScene = loadedWorld.scenes.find((scene) => scene.id === loadedWorld.player.sceneId);
+                    if (!currentScene) {
+                        throw new Error(`No scene found in world ${loadedWorld.name}`);
+                    }
                     this.game = new Game({
                         canvas: ctx,
                         world: new World({
-                            scenes: loadedWorld.scenes
+                            ...loadedWorld
+                        }),
+                        player: new Player({
+                            ...loadedWorld.player,
+                            currentScene
                         })
                     });
                 } else {
+                    // If we're starting a new game without a world specified
+                    const world = new World();
+                    const currentScene = world.scenes.find((scene) => scene.id === world.player.sceneId);
+                    if (!currentScene) {
+                        throw new Error(`No scene found in world ${world.name}`);
+                    }
                     this.game = new Game({
                         canvas: ctx,
-                        world: new World()
+                        world,
+                        player: new Player({
+                            ...world.player,
+                            currentScene
+                        })
                     });
                 }
             }
@@ -65,7 +94,7 @@ export class GameScreenComponent implements OnInit, AfterViewInit, OnDestroy {
 
     movePlayer(dir: 'left' | 'right' | 'up' | 'down') {
         const game = this.game;
-        if (game && game.player) {
+        if (game) {
             const player = game.player;
             if (player.direction === dir) {
                 player.speed = player.speed ? 0 : game.speed;
