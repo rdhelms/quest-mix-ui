@@ -36,15 +36,17 @@ export class GameScreenComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (!currentScene) {
                     throw new Error(`No scene found in world ${loadedGame.world.name}`);
                 }
+                const player = new Player({
+                    ...loadedGame.player,
+                    currentScene
+                });
                 this.game = new Game({
                     canvas: ctx,
                     world: new World({
-                        ...loadedGame.world
+                        ...loadedGame.world,
+                        player
                     }),
-                    player: new Player({
-                        ...loadedGame.player,
-                        currentScene
-                    })
+                    player
                 });
             } else {
                 // If we're starting a new game in an existing world
@@ -54,31 +56,37 @@ export class GameScreenComponent implements OnInit, AfterViewInit, OnDestroy {
                     if (!currentScene) {
                         throw new Error(`No scene found in world ${loadedWorld.name}`);
                     }
+                    const player = new Player({
+                        ...loadedWorld.player,
+                        currentScene
+                    });
                     this.game = new Game({
                         canvas: ctx,
                         world: new World({
-                            ...loadedWorld
+                            ...loadedWorld,
+                            player
                         }),
-                        player: new Player({
-                            ...loadedWorld.player,
-                            currentScene
-                        })
+                        player
                     });
                 } else {
                     // If we're starting a new game without a world specified, use a default world
                     const worldData = await this.worldService.getWorldById(3).toPromise();
-                    const world = new World(worldData);
-                    const currentScene = world.scenes.find((scene) => scene.id === world.player.sceneId);
+                    const currentScene = worldData.scenes.find((scene) => scene.id === worldData.player.sceneId);
                     if (!currentScene) {
-                        throw new Error(`No scene found in world ${world.name}`);
+                        throw new Error(`No scene found in world ${worldData.name}`);
                     }
+                    const player = new Player({
+                        ...worldData.player,
+                        currentScene
+                    });
+                    const world = new World({
+                        ...worldData,
+                        player
+                    });
                     this.game = new Game({
                         canvas: ctx,
                         world,
-                        player: new Player({
-                            ...world.player,
-                            currentScene
-                        })
+                        player
                     });
                 }
             }

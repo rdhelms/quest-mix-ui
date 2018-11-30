@@ -9,3 +9,8 @@ export interface ISceneObj {
     };
     color: string;
 }
+
+export interface ISceneState {
+    id?: number;
+    objects: ISceneObj[];
+}

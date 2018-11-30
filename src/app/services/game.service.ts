@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Game } from '../classes/game';
+import { IGameState } from '../types/game.types';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,7 @@ export class GameService {
         if (!loadedGameString) {
             return null;
         } else {
-            return JSON.parse(loadedGameString) as Game;
+            return JSON.parse(loadedGameString) as IGameState;
         }
     }
 }
