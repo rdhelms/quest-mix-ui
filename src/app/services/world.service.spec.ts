@@ -1,10 +1,14 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { WorldService } from './world.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('WorldService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+      ],
       providers: [WorldService]
     });
   });

@@ -65,8 +65,9 @@ export class GameScreenComponent implements OnInit, AfterViewInit, OnDestroy {
                         })
                     });
                 } else {
-                    // If we're starting a new game without a world specified
-                    const world = new World();
+                    // If we're starting a new game without a world specified, use a default world
+                    const worldData = await this.worldService.getWorldById(3).toPromise();
+                    const world = new World(worldData);
                     const currentScene = world.scenes.find((scene) => scene.id === world.player.sceneId);
                     if (!currentScene) {
                         throw new Error(`No scene found in world ${world.name}`);
