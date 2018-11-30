@@ -3,7 +3,7 @@ import { AssetService } from '../../services/asset.service';
 import { IAsset } from '../../types/asset.types';
 
 @Component({
-    selector: 'home',
+    selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
 })

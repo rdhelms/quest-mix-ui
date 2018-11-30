@@ -6,10 +6,10 @@ import { SessionManagerComponent } from './session-manager/session-manager.compo
 import { FormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-@Component({selector: 'home', template: ''})
+@Component({selector: 'app-home', template: ''})
 class HomeStubComponent {}
 
-@Component({selector: 'profile', template: ''})
+@Component({selector: 'user-profile', template: ''})
 class ProfileStubComponent {}
 
 @Component({selector: 'game-screen', template: ''})

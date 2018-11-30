@@ -15,8 +15,8 @@
 </header>
 
 <main class='app__main'>
-    <home *ngIf='view === "home"' class='app__home' (selectedAsset)='selectedAsset($event)'></home>
-    <profile *ngIf='view === "profile"' class='app__profile'></profile>
+    <app-home *ngIf='view === "home"' class='app__home' (selectedAsset)='selectedAsset($event)'></app-home>
+    <user-profile *ngIf='view === "profile"' class='app__profile'></user-profile>
     <game-screen *ngIf='view === "quests"' class='app__game-screen'></game-screen>
     <world-editor *ngIf='view === "worlds"' class='app__world-editor'></world-editor>
     <asset-editor 

@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProfileComponent } from './profile.component';
+import { UserProfileComponent } from './user-profile.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-describe('ProfileComponent', () => {
-  let component: ProfileComponent;
-  let fixture: ComponentFixture<ProfileComponent>;
+describe('UserProfileComponent', () => {
+  let component: UserProfileComponent;
+  let fixture: ComponentFixture<UserProfileComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -13,14 +13,14 @@ describe('ProfileComponent', () => {
         HttpClientTestingModule
       ],
       declarations: [
-        ProfileComponent
+        UserProfileComponent
       ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProfileComponent);
+    fixture = TestBed.createComponent(UserProfileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
