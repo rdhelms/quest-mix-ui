@@ -26,7 +26,7 @@ export class WorldService {
         }
     }
 
-    getWorldById(id: number) {
+    getWorldById(id: number | 'default') {
         return this.http.get<IWorldState>(`${environment.questMixApiUrl}/worlds/${id}`);
     }
 

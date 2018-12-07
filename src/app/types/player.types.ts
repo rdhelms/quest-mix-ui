@@ -1,5 +1,3 @@
-import { Scene } from '../classes/scene';
-
 export interface IPlayerSize {
     width: number;
     height: number;
@@ -18,7 +16,6 @@ export interface IPlayerState {
     speed: number;
     size: IPlayerSize;
     color: string;
-    sceneId: number;
 }
 
 export interface IPlayerOptions {
@@ -27,5 +24,4 @@ export interface IPlayerOptions {
     speed: number;
     size: IPlayerSize;
     color: string;
-    currentScene: Scene;
 }
