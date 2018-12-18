@@ -2,11 +2,14 @@ import { IPosition, IPlayerSize, IPlayerOptions, TDirection } from '../types/pla
 
 export class Player {
     pos: IPosition;
-    nextPos?: IPosition;
     direction: TDirection;
     speed: number;
     size: IPlayerSize;
     color: string;
+
+    nextPos?: IPosition;
+    tick = 0;
+    startTime = Date.now();
 
     constructor(options: IPlayerOptions) {
         this.pos = options.pos;
@@ -21,8 +24,6 @@ export class Player {
     }
 
     update() {
-        if (this.speed === 0) { return; }
-
         const newPos = {
             x: this.pos.x,
             y: this.pos.y
@@ -37,6 +38,12 @@ export class Player {
             newPos.y = this.pos.y + this.speed;
         }
         this.nextPos = newPos;
+
+        this.tick++;
+
+        if (this.tick > 10) {
+            this.tick = 0;
+        }
     }
 
     draw(ctx: CanvasRenderingContext2D) {

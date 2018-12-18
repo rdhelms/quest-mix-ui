@@ -11,6 +11,8 @@ export class World {
     scenes: ISceneState[];
     currentSceneId: number;
 
+    tick = 0;
+    startTime = Date.now();
     currentScene?: Scene;
 
     constructor(
@@ -39,6 +41,12 @@ export class World {
             this.player.pos = nextPos;
         } else {
             this.player.speed = 0;
+        }
+
+        this.tick++;
+
+        if (this.tick > 10) {
+            this.tick = 0;
         }
     }
 

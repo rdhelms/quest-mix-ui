@@ -1,7 +1,5 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
-import { Game } from '../../classes/game';
 import { WorldService } from '../../services/world.service';
-import { GameService } from '../../services/game.service';
 import { World } from '../../classes/world';
 
 @Component({
@@ -10,14 +8,15 @@ import { World } from '../../classes/world';
     styleUrls: ['./game-screen.component.css']
 })
 export class GameScreenComponent implements AfterViewInit, OnDestroy {
+    canvasContext?: CanvasRenderingContext2D;
+    world?: World;
+    animationRequest?: number;
 
     @ViewChild('gameScreenCanvas')
     canvasRef?: ElementRef;
 
-    game?: Game;
 
     constructor(
-        private gameService: GameService,
         private worldService: WorldService
     ) { }
 
@@ -26,56 +25,63 @@ export class GameScreenComponent implements AfterViewInit, OnDestroy {
         const ctx = canvas.getContext('2d');
 
         if (ctx) {
-            const loadedGame = await this.gameService.getGame();
-            // If we're resuming a game that was already in progress
-            if (loadedGame && loadedGame.world) {
-                const world = new World(loadedGame.world);
-                this.game = new Game({
-                    canvas: ctx,
-                    world
-                });
+            this.canvasContext = ctx;
+            // If we're loading an existing world
+            const loadedWorld = await this.worldService.getWorld();
+            if (loadedWorld) {
+                this.world = new World(loadedWorld);
             } else {
-                // If we're starting a new game in an existing world
-                const loadedWorld = await this.worldService.getWorld();
-                if (loadedWorld) {
-                    const world = new World(loadedWorld);
-                    this.game = new Game({
-                        canvas: ctx,
-                        world
-                    });
-                } else {
-                    // If we're starting a new game without a world specified, use a default world
-                    const worldData = await this.worldService.getWorldById('default').toPromise();
-                    const world = new World(worldData);
-                    this.game = new Game({
-                        canvas: ctx,
-                        world
-                    });
-                }
+                // If we don't have a world specified, use a default world
+                const worldData = await this.worldService.getWorldById('default').toPromise();
+                this.world = new World(worldData);
             }
-            this.gameService.currentGame = this.game;
-            this.game.start();
+            this.start();
         }
     }
 
     ngOnDestroy() {
-        if (this.game) {
-            this.game.quit();
+        this.quit();
+    }
+
+    start() {
+        this.animationRequest = window.requestAnimationFrame(() => {
+            this.run();
+        });
+    }
+
+    run() {
+        if (this.world && this.canvasContext) {
+            this.world.update();
+            this.canvasContext.clearRect(0, 0, 600, 600);
+            this.world.drawScene(this.canvasContext);
+        } else {
+            this.quit();
+            return;
+        }
+
+        this.animationRequest = window.requestAnimationFrame(() => {
+            this.run();
+        });
+    }
+
+    quit() {
+        if (this.animationRequest) {
+            window.cancelAnimationFrame(this.animationRequest);
         }
     }
 
     movePlayer(dir: 'left' | 'right' | 'up' | 'down') {
-        const game = this.game;
-        if (game && game.world) {
-            const player = game.world.player;
+        const world = this.world;
+        if (world) {
+            const player = world.player;
             if (!('turn' in player)) {
                 return;
             }
             if (player.direction === dir) {
-                player.speed = player.speed ? 0 : game.world.settings.speed;
+                player.speed = player.speed ? 0 : world.settings.speed;
             } else {
                 player.turn(dir);
-                player.speed = game.world.settings.speed;
+                player.speed = world.settings.speed;
             }
         }
     }
