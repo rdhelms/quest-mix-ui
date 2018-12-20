@@ -15,7 +15,6 @@ export class GameScreenComponent implements AfterViewInit, OnDestroy {
     @ViewChild('gameScreenCanvas')
     canvasRef?: ElementRef;
 
-
     constructor(
         private worldService: WorldService
     ) { }
