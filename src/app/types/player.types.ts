@@ -1,3 +1,5 @@
+import { IAsset } from './asset.types';
+
 export interface IPlayerSize {
     width: number;
     height: number;
@@ -8,20 +10,18 @@ export interface IPosition {
     y: number;
 }
 
-export type TDirection = 'left' | 'right' | 'up' | 'down';
+export type TPlayerAction = 'walkUp' | 'walkRight' | 'walkDown' | 'walkLeft';
 
 export interface IPlayerState {
     pos: IPosition;
-    direction: TDirection;
-    speed: number;
+    action: TPlayerAction;
     size: IPlayerSize;
-    color: string;
+    avatar: IAsset;
 }
 
 export interface IPlayerOptions {
     pos: IPosition;
-    direction: TDirection;
-    speed: number;
+    action: TPlayerAction;
     size: IPlayerSize;
-    color: string;
+    avatar: IAsset;
 }

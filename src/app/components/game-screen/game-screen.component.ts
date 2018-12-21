@@ -31,7 +31,7 @@ export class GameScreenComponent implements AfterViewInit, OnDestroy {
                 this.world = new World(loadedWorld);
             } else {
                 // If we don't have a world specified, use a default world
-                const worldData = await this.worldService.getWorldById('default').toPromise();
+                const worldData = await this.worldService.getWorldById(1).toPromise();
                 this.world = new World(worldData);
             }
             this.start();
@@ -69,18 +69,22 @@ export class GameScreenComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    movePlayer(dir: 'left' | 'right' | 'up' | 'down') {
+    pressedArrow(arrow: 'ArrowRight' | 'ArrowLeft' | 'ArrowUp' | 'ArrowDown') {
         const world = this.world;
         if (world) {
             const player = world.player;
-            if (!('turn' in player)) {
-                return;
-            }
-            if (player.direction === dir) {
-                player.speed = player.speed ? 0 : world.settings.speed;
-            } else {
-                player.turn(dir);
-                player.speed = world.settings.speed;
+            if ('isWalking' in player && player.isWalking()) {
+                const newAction =
+                    arrow === 'ArrowLeft' ? 'walkLeft'
+                    : arrow === 'ArrowRight' ? 'walkRight'
+                    : arrow === 'ArrowUp' ? 'walkUp'
+                    : 'walkDown';
+                if (player.action === newAction) {
+                    player.speed = player.speed ? 0 : world.settings.speed;
+                } else {
+                    player.changeAction(newAction);
+                    player.speed = world.settings.speed;
+                }
             }
         }
     }
@@ -88,16 +92,10 @@ export class GameScreenComponent implements AfterViewInit, OnDestroy {
     handleKeyUp(evt: KeyboardEvent) {
         switch (evt.key) {
             case 'ArrowRight':
-                this.movePlayer('right');
-                break;
             case 'ArrowLeft':
-                this.movePlayer('left');
-                break;
             case 'ArrowUp':
-                this.movePlayer('up');
-                break;
             case 'ArrowDown':
-                this.movePlayer('down');
+                this.pressedArrow(evt.key as 'ArrowRight' | 'ArrowLeft' | 'ArrowUp' | 'ArrowDown');
                 break;
         }
     }
