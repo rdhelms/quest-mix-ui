@@ -1,6 +1,16 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AssetService } from '../../services/asset.service';
 import { IAsset } from '../../types/asset.types';
+import { WorldService } from '../../services/world.service';
+import { IWorldState } from '../../types/world.types';
+
+export type TSelectedAssetEvent = {
+    type: 'quest' | 'world';
+    info: IWorldState;
+} | {
+    type: 'background' | 'foreground' | 'object' | 'entity' | 'avatar';
+    info: IAsset | undefined;
+};
 
 @Component({
     selector: 'app-home',
@@ -9,9 +19,9 @@ import { IAsset } from '../../types/asset.types';
 })
 export class HomeComponent implements OnInit {
 
-    @Output() selectedAssetType = new EventEmitter<any>();
-    @Output() selectedAsset = new EventEmitter<any>();
+    @Output() selectedAsset = new EventEmitter<TSelectedAssetEvent>();
 
+    worlds: IWorldState[] = [];
     backgrounds: IAsset[] = [];
     foregrounds: IAsset[] = [];
     objects: IAsset[] = [];
@@ -20,10 +30,14 @@ export class HomeComponent implements OnInit {
     loading = true;
 
     constructor(
+        private worldService: WorldService,
         private assetService: AssetService
     ) { }
 
     async ngOnInit() {
+        // Worlds
+        const loadedWorlds = this.worldService.getAllWorlds().toPromise();
+
         // Backgrounds
         const loadedBackgrounds = this.assetService.getAssetsByType('background');
         const loadedForegrounds = this.assetService.getAssetsByType('foreground');
@@ -32,6 +46,7 @@ export class HomeComponent implements OnInit {
         const loadedAvatars = this.assetService.getAssetsByType('avatar');
 
         const result = await Promise.all([
+            loadedWorlds,
             loadedBackgrounds,
             loadedForegrounds,
             loadedObjects,
@@ -40,33 +55,37 @@ export class HomeComponent implements OnInit {
         ]);
 
         if (result[0]) {
-            this.backgrounds = result[0];
+            this.worlds = result[0];
+        }
+
+        if (result[1]) {
+            this.backgrounds = result[1];
         }
 
         // Foregrounds
-        if (result[1]) {
-            this.foregrounds = result[1];
+        if (result[2]) {
+            this.foregrounds = result[2];
         }
 
         // Objects
-        if (result[2]) {
-            this.objects = result[2];
+        if (result[3]) {
+            this.objects = result[3];
         }
 
         // Entities
-        if (result[3]) {
-            this.entities = result[3];
+        if (result[4]) {
+            this.entities = result[4];
         }
 
         // Avatars
-        if (result[4]) {
-            this.avatars = result[4];
+        if (result[5]) {
+            this.avatars = result[5];
         }
 
         this.loading = false;
     }
 
-    selectAsset(assetType: string, asset: any) {
+    selectAsset(assetType: string, asset: IAsset | IWorldState) {
         const nowEditing = {
             type: (assetType === 'quests') ? 'quest'
                 : (assetType === 'worlds') ? 'world'
@@ -77,7 +96,7 @@ export class HomeComponent implements OnInit {
                 : (assetType === 'avatars') ? 'avatar'
                 : 'background',
             info: asset ? asset : undefined
-        };
+        } as TSelectedAssetEvent;
         this.selectedAsset.emit(nowEditing);
     }
 

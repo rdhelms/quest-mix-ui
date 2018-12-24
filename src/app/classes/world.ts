@@ -5,6 +5,7 @@ import { IPosition, IPlayerState } from '../types/player.types';
 import { ISceneState } from '../types/scene.types';
 
 export class World {
+    id: number;
     name: string;
     player: Player | IPlayerState;
     settings: IWorldSettings;
@@ -18,6 +19,7 @@ export class World {
     constructor(
         options: IWorldOptions
     ) {
+        this.id = options.id;
         this.name = options.name;
         this.player = new Player(options.player);
         this.settings = options.settings;

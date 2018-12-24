@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { UserService } from '../services/user.service';
+import { WorldService } from '../services/world.service';
+import { TSelectedAssetEvent } from './home/home.component';
 
 @Component({
     selector: 'app-root',
@@ -7,7 +9,7 @@ import { UserService } from '../services/user.service';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    view = 'quests';
+    view = 'worlds';
     currentlyEditing?: any = {
         type: 'avatar',
         info: {
@@ -16,6 +18,7 @@ export class AppComponent {
     };
 
     constructor(
+        private worldService: WorldService,
         public userService: UserService
     ) { }
 
@@ -23,10 +26,15 @@ export class AppComponent {
         this.view = newView;
     }
 
-    selectedAsset(asset: any) {
+    selectedAsset(asset: TSelectedAssetEvent) {
         if (asset) {
-            this.currentlyEditing = asset;
-            this.changeView('assets');
+            if (asset.type === 'quest' || asset.type === 'world') {
+                this.worldService.setCurrentWorldId(asset.info.id);
+                this.changeView('worlds');
+            } else {
+                this.currentlyEditing = asset;
+                this.changeView('assets');
+            }
         }
     }
 }

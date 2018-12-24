@@ -8,6 +8,7 @@ import { IWorldState } from '../types/world.types';
     providedIn: 'root'
 })
 export class WorldService {
+    currentWorldId = 1;
 
     constructor(
         private http: HttpClient,
@@ -24,6 +25,18 @@ export class WorldService {
         } else {
             return JSON.parse(loadedWorldString) as IWorldState;
         }
+    }
+
+    setCurrentWorldId(id: number) {
+        this.currentWorldId = id;
+    }
+
+    getAllWorlds(page = 0) {
+        return this.http.get<IWorldState[]>(`${environment.questMixApiUrl}/worlds`, {
+            params: {
+                page: String(page)
+            }
+        });
     }
 
     getWorldById(id: number) {

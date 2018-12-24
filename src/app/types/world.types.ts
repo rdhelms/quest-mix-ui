@@ -7,6 +7,7 @@ export interface IWorldSettings {
 }
 
 export interface IWorldState {
+    id: number;
     name: string;
     player: IPlayerState;
     settings: IWorldSettings;
@@ -15,6 +16,7 @@ export interface IWorldState {
 }
 
 export interface IWorldOptions {
+    id: number;
     name: string;
     player: IPlayerState;
     settings: IWorldSettings;

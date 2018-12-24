@@ -7,8 +7,8 @@
     (keyup)='handleKeyUp($event)'
 ></canvas>
 <div class='game-screen__controls'>
-    <button (click)='movePlayer("left")'>Left</button>
-    <button (click)='movePlayer("right")'>Right</button>
-    <button (click)='movePlayer("up")'>Up</button>
-    <button (click)='movePlayer("down")'>Down</button>
+    <button (click)='pressedArrow("ArrowLeft")'>Left</button>
+    <button (click)='pressedArrow("ArrowRight")'>Right</button>
+    <button (click)='pressedArrow("ArrowUp")'>Up</button>
+    <button (click)='pressedArrow("ArrowDown")'>Down</button>
 </div>
