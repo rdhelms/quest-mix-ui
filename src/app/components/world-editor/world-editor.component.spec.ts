@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WorldEditorComponent } from './world-editor.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('WorldEditorComponent', () => {
   let component: WorldEditorComponent;
@@ -8,6 +9,9 @@ describe('WorldEditorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ],
       declarations: [ WorldEditorComponent ]
     })
     .compileComponents();
