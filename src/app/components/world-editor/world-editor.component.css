@@ -3,24 +3,46 @@
     margin: 0.5rem;
 }
 
-h2 {
-    padding: 0.5rem;
-    font-size: 1.25rem;
-    background-color: slategray;
-    color: white;
-}
-
 h3 {
     font-size: 1rem;
 }
 
 .world-editor__world-options,
-.world-editor__world-state,
-.world-editor__world-events,
-.world-editor__scene-options,
-.world-editor__scene-state,
-.world-editor__scene-events {
+.world-editor__player-options,
+.world-editor__scenes {
     border: 1px solid slategray;
     border-radius: 4px;
     box-shadow: 2px 2px 10px 0 slategray;
+}
+
+.world-editor__section-title {
+    padding: 0.5rem;
+    font-size: 1.25rem;
+    background-color: slategray;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.world-editor__world-name {
+    margin: 0;
+    font-size: inherit;
+}
+
+.world-editor__edit-btn {
+    margin: 0;
+    width: 5rem;
+}
+
+.world-editor__owner-name {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.world-editor__loading {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
