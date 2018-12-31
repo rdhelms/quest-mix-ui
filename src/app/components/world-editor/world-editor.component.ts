@@ -20,7 +20,6 @@ export class WorldEditorComponent implements OnInit {
         const worldId = this.worldService.currentWorldId;
 
         this.world = await this.worldService.getWorldById(worldId).toPromise();
-        console.log(this.world);
         this.loading = false;
     }
 }
