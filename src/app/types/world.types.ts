@@ -1,4 +1,3 @@
-import { Scene } from '../classes/scene';
 import { IPlayerState } from './player.types';
 import { ISceneState } from './scene.types';
 import { IUser } from './user.types';

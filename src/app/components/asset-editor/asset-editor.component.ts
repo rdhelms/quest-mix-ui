@@ -6,7 +6,7 @@ import { IAsset, TAssetType } from '../../types/asset.types';
 @Component({
     selector: 'asset-editor',
     templateUrl: './asset-editor.component.html',
-    styleUrls: ['./asset-editor.component.css']
+    styleUrls: ['./asset-editor.component.css'],
 })
 export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -32,7 +32,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     currentFrame?: TFrame;
 
     constructor(
-        private assetService: AssetService
+        private assetService: AssetService,
     ) { }
 
     async ngOnInit() {
@@ -48,7 +48,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
             this.asset = {
                 id: Date.now(),
                 name: '',
-                frames: (this.assetType === 'background' || this.assetType === 'foreground') ? [[]] : Array(4).fill(null).map(() => [])
+                frames: (this.assetType === 'background' || this.assetType === 'foreground') ? [[]] : Array(4).fill(null).map(() => []),
             };
         } else {
             this.asset = loadedAsset;
@@ -105,7 +105,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
                                     pixel.pos.x,
                                     pixel.pos.y,
                                     pixel.size,
-                                    pixel.size
+                                    pixel.size,
                                 );
                             }
                         });
@@ -133,7 +133,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.mousePos.x,
                         this.mousePos.y,
                         this.pixelSize,
-                        this.pixelSize
+                        this.pixelSize,
                     );
                 } else {
                     const scaleFactor = this.brushSize * this.pixelSize;
@@ -147,7 +147,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.mousePos.x - scaleFactor,
                         this.mousePos.y - scaleFactor,
                         (scaleFactor) * 2 + this.pixelSize,
-                        (scaleFactor) * 2 + this.pixelSize
+                        (scaleFactor) * 2 + this.pixelSize,
                     );
                 }
 
@@ -213,10 +213,10 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
                                 const newPixel = {
                                     pos: {
                                         x: i,
-                                        y: j
+                                        y: j,
                                     },
                                     size: this.pixelSize,
-                                    color: this.brushColor
+                                    color: this.brushColor,
                                 };
                                 this.addPixel(newPixel);
                             }
@@ -256,7 +256,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     handleMouseLeave() {
         this.mousePos = {
             x: undefined,
-            y: undefined
+            y: undefined,
         };
         this.clearPaintingInterval();
     }
@@ -355,7 +355,7 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
             this.asset = {
                 id: Date.now(),
                 name: '',
-                frames: (this.assetType === 'background' || this.assetType === 'foreground') ? [[]] : Array(4).fill(null).map(() => [])
+                frames: (this.assetType === 'background' || this.assetType === 'foreground') ? [[]] : Array(4).fill(null).map(() => []),
             };
         }
         this.currentFrame = this.asset && this.asset.frames && this.asset.frames[0];

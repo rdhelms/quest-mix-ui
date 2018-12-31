@@ -5,7 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AvatarService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    imports: [ HttpClientTestingModule ]
+    imports: [ HttpClientTestingModule ],
   }));
 
   it('should be created', () => {

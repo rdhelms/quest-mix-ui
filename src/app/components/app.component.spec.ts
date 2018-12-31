@@ -35,12 +35,12 @@ describe('AppComponent', () => {
         GameScreenStubComponent,
         WorldEditorStubComponent,
         AssetEditorStubComponent,
-        SessionManagerComponent
+        SessionManagerComponent,
       ],
       imports: [
         FormsModule,
-        HttpClientTestingModule
-      ]
+        HttpClientTestingModule,
+      ],
     }).compileComponents();
   }));
   it('should create the app', async(() => {

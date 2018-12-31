@@ -15,7 +15,7 @@ export type TSelectedAssetEvent = {
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css']
+    styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
 
@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private worldService: WorldService,
-        private assetService: AssetService
+        private assetService: AssetService,
     ) { }
 
     async ngOnInit() {
@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
             loadedForegrounds,
             loadedObjects,
             loadedEntities,
-            loadedAvatars
+            loadedAvatars,
         ]);
 
         if (result[0]) {
@@ -95,7 +95,7 @@ export class HomeComponent implements OnInit {
                 : (assetType === 'entities') ? 'entity'
                 : (assetType === 'avatars') ? 'avatar'
                 : 'background',
-            info: asset ? asset : undefined
+            info: asset ? asset : undefined,
         } as TSelectedAssetEvent;
         this.selectedAsset.emit(nowEditing);
     }

@@ -21,14 +21,14 @@ import { SessionManagerComponent } from './components/session-manager/session-ma
     WorldEditorComponent,
     AssetEditorComponent,
     AssetPreviewComponent,
-    SessionManagerComponent
+    SessionManagerComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

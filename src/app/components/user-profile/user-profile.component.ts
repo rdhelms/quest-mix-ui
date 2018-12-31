@@ -4,12 +4,12 @@ import { UserService } from 'src/app/services/user.service';
 @Component({
     selector: 'user-profile',
     templateUrl: './user-profile.component.html',
-    styleUrls: ['./user-profile.component.css']
+    styleUrls: ['./user-profile.component.css'],
 })
 export class UserProfileComponent implements OnInit {
 
     constructor(
-        public userService: UserService
+        public userService: UserService,
     ) { }
 
     ngOnInit() {

@@ -9,7 +9,7 @@ describe('WorldService', () => {
       imports: [
         HttpClientTestingModule,
       ],
-      providers: [WorldService]
+      providers: [WorldService],
     });
   });
 

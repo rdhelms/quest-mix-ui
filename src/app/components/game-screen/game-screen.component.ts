@@ -5,7 +5,7 @@ import { World } from '../../classes/world';
 @Component({
     selector: 'game-screen',
     templateUrl: './game-screen.component.html',
-    styleUrls: ['./game-screen.component.css']
+    styleUrls: ['./game-screen.component.css'],
 })
 export class GameScreenComponent implements AfterViewInit, OnDestroy {
     canvasContext?: CanvasRenderingContext2D;
@@ -16,7 +16,7 @@ export class GameScreenComponent implements AfterViewInit, OnDestroy {
     canvasRef?: ElementRef;
 
     constructor(
-        private worldService: WorldService
+        private worldService: WorldService,
     ) { }
 
     async ngAfterViewInit() {

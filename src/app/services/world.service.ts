@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { IWorldState } from '../types/world.types';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class WorldService {
     currentWorldId = 1;
@@ -34,8 +34,8 @@ export class WorldService {
     getAllWorlds(page = 0) {
         return this.http.get<IWorldState[]>(`${environment.questMixApiUrl}/worlds`, {
             params: {
-                page: String(page)
-            }
+                page: String(page),
+            },
         });
     }
 

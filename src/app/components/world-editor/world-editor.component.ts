@@ -5,14 +5,14 @@ import { IWorldState } from '../../types/world.types';
 @Component({
     selector: 'world-editor',
     templateUrl: './world-editor.component.html',
-    styleUrls: ['./world-editor.component.css']
+    styleUrls: ['./world-editor.component.css'],
 })
 export class WorldEditorComponent implements OnInit {
     world?: IWorldState;
     loading = true;
 
     constructor(
-        private worldService: WorldService
+        private worldService: WorldService,
     ) {}
 
     async ngOnInit() {

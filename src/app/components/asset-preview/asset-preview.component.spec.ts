@@ -8,7 +8,7 @@ describe('AssetPreviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AssetPreviewComponent ]
+      declarations: [ AssetPreviewComponent ],
     })
     .compileComponents();
   }));

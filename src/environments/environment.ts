@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    questMixApiUrl: 'http://localhost:3000'
+    questMixApiUrl: 'http://localhost:3000',
 };
 
 /*

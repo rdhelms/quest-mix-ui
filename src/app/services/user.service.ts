@@ -4,14 +4,14 @@ import { environment } from 'src/environments/environment';
 import { IUser } from '../types/user.types';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class UserService {
 
     currentUser?: IUser;
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
     ) { }
 
     getUsers() {

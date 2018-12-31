@@ -6,20 +6,20 @@ import { TSelectedAssetEvent } from './home/home.component';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
     view = 'worlds';
     currentlyEditing?: any = {
         type: 'avatar',
         info: {
-            id: 0
-        }
+            id: 0,
+        },
     };
 
     constructor(
         private worldService: WorldService,
-        public userService: UserService
+        public userService: UserService,
     ) { }
 
     changeView(newView: 'home' | 'profile' | 'quests' | 'worlds' | 'assets') {

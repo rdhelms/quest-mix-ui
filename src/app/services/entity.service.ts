@@ -4,12 +4,12 @@ import { IAsset } from '../types/asset.types';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class EntityService {
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
     ) { }
 
     getEntities() {

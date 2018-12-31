@@ -19,12 +19,12 @@ describe('AssetEditorComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
        ],
       declarations: [
         AssetEditorComponent,
-        AssetPreviewStubComponent
-      ]
+        AssetPreviewStubComponent,
+      ],
     })
     .compileComponents();
   }));

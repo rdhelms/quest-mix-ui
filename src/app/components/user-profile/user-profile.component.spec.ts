@@ -10,11 +10,11 @@ describe('UserProfileComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
       ],
       declarations: [
-        UserProfileComponent
-      ]
+        UserProfileComponent,
+      ],
     })
     .compileComponents();
   }));

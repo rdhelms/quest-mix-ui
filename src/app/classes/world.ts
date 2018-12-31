@@ -17,7 +17,7 @@ export class World {
     currentScene?: Scene;
 
     constructor(
-        options: IWorldOptions
+        options: IWorldOptions,
     ) {
         this.id = options.id;
         this.name = options.name;
@@ -80,7 +80,7 @@ export class World {
                     object.pos.x,
                     object.pos.y,
                     object.size.width,
-                    object.size.height
+                    object.size.height,
                 );
             });
 

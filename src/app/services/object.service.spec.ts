@@ -6,8 +6,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 describe('ObjectService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
-      HttpClientTestingModule
-    ]
+      HttpClientTestingModule,
+    ],
   }));
 
   it('should be created', () => {

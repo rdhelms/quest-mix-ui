@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { TFrame } from '../../types/editor.types';
 import { IAsset } from '../../types/asset.types';
 
 @Component({
     selector: 'asset-preview',
     templateUrl: './asset-preview.component.html',
-    styleUrls: ['./asset-preview.component.css']
+    styleUrls: ['./asset-preview.component.css'],
 })
 export class AssetPreviewComponent implements OnChanges, AfterViewInit, OnDestroy {
 
@@ -58,7 +58,7 @@ export class AssetPreviewComponent implements OnChanges, AfterViewInit, OnDestro
                                     pixel.pos.x,
                                     pixel.pos.y,
                                     pixel.size,
-                                    pixel.size
+                                    pixel.size,
                                 );
                             }
                         });

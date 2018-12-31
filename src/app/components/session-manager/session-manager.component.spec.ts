@@ -12,11 +12,11 @@ describe('SessionManagerComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
       ],
       declarations: [
-        SessionManagerComponent
-      ]
+        SessionManagerComponent,
+      ],
     })
     .compileComponents();
   }));

@@ -31,7 +31,7 @@ export class Player {
     update() {
         const newPos = {
             x: this.pos.x,
-            y: this.pos.y
+            y: this.pos.y,
         };
         if (this.action === 'walkLeft') {
             newPos.x = this.pos.x - this.speed;
@@ -66,7 +66,7 @@ export class Player {
                             this.pos.x + pixel.pos.x * this.size.width / 100,
                             this.pos.y + pixel.pos.y * this.size.height / 100,
                             pixel.size * this.size.width / 50,
-                            pixel.size * this.size.height / 50
+                            pixel.size * this.size.height / 50,
                         );
                     }
                 });

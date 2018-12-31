@@ -12,7 +12,7 @@ describe('GameScreenComponent', () => {
       imports: [
         HttpClientTestingModule,
       ],
-      declarations: [ GameScreenComponent ]
+      declarations: [ GameScreenComponent ],
     })
     .compileComponents();
   }));

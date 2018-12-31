@@ -7,7 +7,7 @@ describe('AssetService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      providers: [ AssetService ]
+      providers: [ AssetService ],
     });
   });
 

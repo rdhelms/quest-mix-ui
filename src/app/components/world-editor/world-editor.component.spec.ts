@@ -10,9 +10,9 @@ describe('WorldEditorComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
       ],
-      declarations: [ WorldEditorComponent ]
+      declarations: [ WorldEditorComponent ],
     })
     .compileComponents();
   }));

@@ -8,7 +8,7 @@ import { EntityService } from './entity.service';
 import { ObjectService } from './object.service';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AssetService {
 
@@ -20,7 +20,7 @@ export class AssetService {
         private foregroundService: ForegroundService,
         private avatarService: AvatarService,
         private entityService: EntityService,
-        private objectService: ObjectService
+        private objectService: ObjectService,
     ) { }
 
     async getAssetsByType(assetType: TAssetType): Promise<IAsset[]> {
@@ -48,7 +48,7 @@ export class AssetService {
         const newAsset: IAsset = {
             id: Date.now(),
             name: '',
-            frames: (type === 'background' || type === 'foreground') ? [[]] : Array(4).fill(null).map(() => [])
+            frames: (type === 'background' || type === 'foreground') ? [[]] : Array(4).fill(null).map(() => []),
         };
         const assets = await this.getAssets();
         assets.push(newAsset);
