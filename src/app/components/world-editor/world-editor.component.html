@@ -4,23 +4,51 @@
 <ng-container *ngIf="!loading">
     <div class="world-editor__world-options">
         <h2 class="world-editor__section-title">
-            <span class="world-editor__world-name">World #{{world?.id}}: {{world?.name}}</span>
-            <button class="world-editor__edit-btn">Edit</button>
+            <span class="world-editor__world-name">World: {{world?.name}}</span>
+            <button class="world-editor__edit-btn" (click)="startEditing()" *ngIf="!editing">Edit</button>
+            <button class="world-editor__cancel-btn" (click)="cancelEditing()" *ngIf="editing">Cancel</button>
+            <button class="world-editor__save-btn" (click)="saveEditing()" *ngIf="editing">Save</button>
             <span class="world-editor__owner-name">Creator: {{world?.owner.username}}</span>
         </h2>
         <h3>Settings</h3>
-        <div>
-            <p>Game Speed: {{world?.settings.speed}}</p>
+        <div class="world-editor__setting-container">
+            <label class="world-editor__game-speed-label">Game Speed:</label>
+            <span class="world-editor__game-speed">{{world?.settings.speed}}</span>
+            <input type="range" min="0" max="10" class="world-editor__game-speed-input" *ngIf="editing" [(ngModel)]="world?.settings.speed">
         </div>
         <div class="world-editor__player-options">
             <h2 class="world-editor__section-title">Player</h2>
             <div>
-                <p>Avatar: {{world?.player.avatar.name}}</p>
-                <p>Scene: {{world?.currentSceneId}}</p>
-                <p>Position: ({{world?.player.pos.x}}, {{world?.player.pos.y}})</p>
-                <p>Action: {{world?.player.action}}</p>
-                <p>Width: {{world?.player.size.width}}</p>
-                <p>Height: {{world?.player.size.height}}</p>
+                <div class="world-editor__setting-container">
+                    <label>Avatar:</label> 
+                    <span *ngIf="!editing">{{world?.player.avatar.name}}</span>
+                    <button *ngIf="editing">{{world?.player.avatar.name}}</button>
+                </div>
+                <div class="world-editor__setting-container">
+                    <label>Scene:</label> 
+                    <span *ngIf="!editing">{{world?.currentSceneId}}</span>
+                    <button *ngIf="editing">{{world?.currentSceneId}}</button>
+                </div>
+                <div class="world-editor__setting-container">
+                    <label>Position:</label>
+                    <span *ngIf="!editing">({{world?.player.pos.x}}, {{world?.player.pos.y}})</span>
+                    <button *ngIf="editing">({{world?.player.pos.x}}, {{world?.player.pos.y}})</button>
+                </div>
+                <div class="world-editor__setting-container">
+                    <label>Action:</label>
+                    <span *ngIf="!editing">{{world?.player.action}}</span>
+                    <button *ngIf="editing">{{world?.player.action}}</button>
+                </div>
+                <div class="world-editor__setting-container">
+                    <label>Width:</label>
+                    <span>{{world?.player.size.width}}</span>
+                    <input type="range" min="1" max="100" *ngIf="editing" [(ngModel)]="world?.player.size.width">
+                </div>
+                <div class="world-editor__setting-container">
+                    <label>Height:</label>
+                    <span>{{world?.player.size.height}}</span>
+                    <input type="range" min="1" max="100" *ngIf="editing" [(ngModel)]="world?.player.size.height">
+                </div>
             </div>
         </div>
         <div class="world-editor__scenes">

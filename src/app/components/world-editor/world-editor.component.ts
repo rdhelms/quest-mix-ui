@@ -9,7 +9,9 @@ import { IWorldState } from '../../types/world.types';
 })
 export class WorldEditorComponent implements OnInit {
     world?: IWorldState;
+    snapshot?: IWorldState;
     loading = true;
+    editing = false;
 
     constructor(
         private worldService: WorldService,
@@ -21,5 +23,19 @@ export class WorldEditorComponent implements OnInit {
 
         this.world = await this.worldService.getWorldById(worldId).toPromise();
         this.loading = false;
+    }
+
+    startEditing() {
+        this.snapshot = JSON.parse(JSON.stringify(this.world));
+        this.editing = true;
+    }
+
+    cancelEditing() {
+        this.world = this.snapshot;
+        this.editing = false;
+    }
+
+    saveEditing() {
+        this.editing = false;
     }
 }
