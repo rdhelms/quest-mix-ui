@@ -35,7 +35,19 @@ export class WorldEditorComponent implements OnInit {
         this.editing = false;
     }
 
-    saveEditing() {
+    async saveEditing() {
+        if (this.world) {
+            try {
+                this.loading = true;
+                const result = await this.worldService.updateWorld(this.world).toPromise();
+                alert(JSON.stringify(result, null, 4));
+                this.loading = false;
+            } catch (err) {
+                alert(`Failed to update world ${this.world.name}`);
+                this.world = this.snapshot;
+                this.loading = false;
+            }
+        }
         this.editing = false;
     }
 }

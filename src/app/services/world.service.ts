@@ -46,4 +46,8 @@ export class WorldService {
     createWorld(options?: Partial<World>) {
         return this.http.post<IWorldState>(`${environment.questMixApiUrl}/worlds`, options);
     }
+
+    updateWorld(options: IWorldState) {
+        return this.http.patch<IWorldState>(`${environment.questMixApiUrl}/worlds/${options.id}`, options);
+    }
 }
