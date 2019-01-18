@@ -9,10 +9,9 @@ import { IAsset, TAssetType } from '../../types/asset.types';
     styleUrls: ['./asset-editor.component.css'],
 })
 export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
-
+    @Input() asset?: IAsset;
     @Input() canvasSize!: number;
     @Input() assetType!: TAssetType;
-    @Input() assetId?: number;
 
     @ViewChild('assetEditorCanvas') canvasRef?: ElementRef;
 
@@ -27,7 +26,6 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     brushColor = '#FFFFFF';
     paintingInterval?: number;
     drawType: TDrawType = 'brush';
-    asset?: IAsset;
     numFrames?: number;
     currentFrame?: TFrame;
 
@@ -36,33 +34,12 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     ) { }
 
     async ngOnInit() {
-        this.assetService.currentType = this.assetType;
-        let loadedAsset: IAsset | null | undefined;
-        if (this.assetId !== undefined) {
-            loadedAsset = await this.assetService.getAssetById(this.assetId);
-        }
-        if (!loadedAsset) {
-            loadedAsset = await this.assetService.getCurrentAsset();
-        }
-        if (!loadedAsset) {
-            this.asset = {
-                id: Date.now(),
-                name: '',
-                frames: (this.assetType === 'background' || this.assetType === 'foreground') ? [[]] : Array(4).fill(null).map(() => []),
-            };
-        } else {
-            this.asset = loadedAsset;
-        }
-
         this.currentFrame = this.asset && this.asset.frames && this.asset.frames[0];
         this.numFrames = this.asset && this.asset.frames && this.asset.frames.length;
     }
 
     ngAfterViewInit() {
-        this.canvas = this.canvasRef && this.canvasRef.nativeElement;
-        this.animationRequest = window.requestAnimationFrame(() => {
-            this.drawEditor();
-        });
+        this.initCanvas();
     }
 
     ngOnDestroy() {
@@ -71,6 +48,15 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         if (this.animationRequest) {
             window.cancelAnimationFrame(this.animationRequest);
+        }
+    }
+
+    initCanvas() {
+        this.canvas = this.canvasRef && this.canvasRef.nativeElement;
+        if (this.canvas) {
+            this.animationRequest = window.requestAnimationFrame(() => {
+                this.drawEditor();
+            });
         }
     }
 
@@ -342,23 +328,5 @@ export class AssetEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     selectDrawType(type: TDrawType) {
         this.drawType = type;
-    }
-
-    async selectAssetType(type: TAssetType) {
-        this.assetService.currentType = type;
-        let loadedAsset: IAsset | null | undefined;
-        loadedAsset = await this.assetService.getCurrentAsset();
-        this.assetType = type;
-        if (loadedAsset) {
-            this.asset = loadedAsset;
-        } else {
-            this.asset = {
-                id: Date.now(),
-                name: '',
-                frames: (this.assetType === 'background' || this.assetType === 'foreground') ? [[]] : Array(4).fill(null).map(() => []),
-            };
-        }
-        this.currentFrame = this.asset && this.asset.frames && this.asset.frames[0];
-        this.numFrames = this.asset && this.asset.frames && this.asset.frames.length;
     }
 }

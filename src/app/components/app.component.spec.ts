@@ -18,8 +18,8 @@ class GameScreenStubComponent {}
 @Component({selector: 'world-editor', template: ''})
 class WorldEditorStubComponent {}
 
-@Component({selector: 'asset-editor', template: ''})
-class AssetEditorStubComponent {
+@Component({selector: 'app-assets', template: ''})
+class AssetsStubComponent {
   @Input() canvasSize!: number;
   @Input() assetType!: TAssetType;
   @Input() assetId?: number;
@@ -30,11 +30,11 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
+        AssetsStubComponent,
         HomeStubComponent,
         ProfileStubComponent,
         GameScreenStubComponent,
         WorldEditorStubComponent,
-        AssetEditorStubComponent,
         SessionManagerComponent,
       ],
       imports: [

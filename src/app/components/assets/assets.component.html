@@ -1,0 +1,72 @@
+<nav class='assets__nav'>
+    <button *ngFor='let type of ["background", "foreground", "object", "entity", "avatar"]' [class.active]='assetType === type' (click)='selectAssetType(type)'>{{type | uppercase}}</button>
+</nav>
+<ul class='assets__browse-tabs'>
+    <li class='assets__browse-tab' [class.active]='viewState === "public"' (click)='setViewState("public")'>All {{pluralizeAssetType(assetType) | titlecase}}</li>
+    <li class='assets__browse-tab' [class.active]='viewState === "private"' (click)='setViewState("private")'>Your {{pluralizeAssetType(assetType) | titlecase}}</li>
+    <li class='assets__browse-tab' [class.active]='viewState === "edit"' (click)='setViewState("edit")'>Editor</li>
+</ul>
+<ng-container *ngIf='viewState === "loading"'>
+    <div class='assets__loading'>Loading...</div>
+</ng-container>
+<ng-container *ngIf='viewState === "public"'>
+    <ul class='assets__public-asset-list'>
+        <li *ngFor='let asset of assetList'
+            (click)="selectAsset(asset)"
+            class='assets__public-asset-list-item'>
+            <div class='assets__public-asset-info'>
+                <h3 class='assets__public-asset-name'>{{asset.name}}</h3>
+                <asset-preview
+                    *ngIf='asset.frames.length > 1'
+                    class='assets__public-asset-preview'
+                    [canvasSize]='canvasSize'
+                    [asset]='asset'
+                    [canvasBorder]="false"
+                ></asset-preview>
+            </div>
+        </li>
+    </ul>
+</ng-container>
+<ng-container *ngIf='viewState === "private"'>
+    <ng-container *ngIf='user'>
+        <ul *ngIf='myAssets.length > 0'>
+            <li *ngFor='let asset of myAssets'>{{asset.name}}</li>
+        </ul>
+        <div *ngIf='myAssets.length === 0' class='assets__no-assets-yet'>
+            <h3>You haven't made any {{pluralizeAssetType(assetType)}} yet!</h3>
+        </div>
+    </ng-container>
+    <ng-container *ngIf='!user'>
+        <div class='assets__sign-in-prompt-container'>
+            <div class='assets__sign-in-prompt'>
+                <h3>You must sign in to view your own {{pluralizeAssetType(assetType)}}</h3>
+                <session-manager (loggedInUser)='getCurrentUser()'></session-manager>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>
+<ng-container *ngIf='viewState === "edit"'>
+    <ng-container *ngIf='user'>
+        <ng-container *ngIf='asset'>
+            <asset-editor
+                [asset]="asset"
+                [canvasSize]="canvasSize"
+                [assetType]="assetType"
+            ></asset-editor>
+        </ng-container>
+        <ng-container *ngIf='!asset'>
+            <div class='assets__no-asset-selected-container'>
+                <button (click)='createAsset()'>Create New {{assetType | titlecase}}</button>
+                <button (click)='setViewState("public")'>Browse {{pluralizeAssetType(assetType) | titlecase}}</button>
+            </div>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf='!user'>
+        <div class='assets__sign-in-prompt-container'>
+            <div class='assets__sign-in-prompt'>
+                <h3>You must sign in to edit {{pluralizeAssetType(assetType)}}</h3>
+                <session-manager (loggedInUser)='getCurrentUser()'></session-manager>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>

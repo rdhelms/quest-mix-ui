@@ -6,4 +6,5 @@ export interface IAsset {
     id: number;
     name: string;
     frames: TFrame[];
+    ownerId: number;
 }

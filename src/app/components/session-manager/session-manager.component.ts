@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { SessionService } from 'src/app/services/session.service';
 import { UserService } from 'src/app/services/user.service';
+import { IUser } from '../../types/user.types';
 
 @Component({
     selector: 'session-manager',
@@ -18,6 +19,8 @@ export class SessionManagerComponent implements OnInit {
     email?: string;
 
     @Output() newView = new EventEmitter<'home' | 'profile' | 'player' | 'editor'>();
+    @Output() loggedInUser = new EventEmitter<IUser>();
+    @Output() loggedOut = new EventEmitter();
 
     constructor(
         private sessionService: SessionService,
@@ -47,6 +50,7 @@ export class SessionManagerComponent implements OnInit {
                 this.username = undefined;
                 this.password = undefined;
                 this.userService.currentUser = data;
+                this.loggedInUser.emit(data);
             });
         } else {
             this.invalidSignIn = true;
@@ -57,6 +61,7 @@ export class SessionManagerComponent implements OnInit {
         this.signedIn = false;
         this.userService.currentUser = undefined;
         this.newView.emit('home');
+        this.loggedOut.emit();
     }
 
     registerClicked() {

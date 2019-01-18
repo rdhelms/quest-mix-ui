@@ -19,11 +19,11 @@
     <user-profile *ngIf='view === "profile"' class='app__profile'></user-profile>
     <game-screen *ngIf='view === "quests"' class='app__game-screen'></game-screen>
     <world-editor *ngIf='view === "worlds"' class='app__world-editor'></world-editor>
-    <asset-editor 
+    <app-assets
         *ngIf='view === "assets"'
-        class='app__asset-editor'
+        class='app__assets'
         [canvasSize]='600'
         [assetType]='currentlyEditing.type'
         [assetId]='currentlyEditing.info?.id'
-    ></asset-editor>
+    ></app-assets>
 </main>

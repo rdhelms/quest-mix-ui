@@ -1,4 +1,7 @@
 <canvas
+    [ngStyle]="{
+        'border': canvasBorder ? '1px solid black' : '0'
+    }"
     #assetPreviewCanvas
     class='asset-preview__canvas'
     [width]='canvasSize'

@@ -1,6 +1,3 @@
-<nav class='asset-editor__nav'>
-    <button *ngFor='let type of ["background", "foreground", "object", "entity", "avatar"]' [class.active]='assetType === type' (click)='selectAssetType(type)'>{{type | uppercase}}</button>
-</nav>
 <div class='asset-editor__top-toolbar'>
     <div>
         <label> Name: </label>
@@ -8,7 +5,7 @@
     </div>
     <button class='asset-editor__delete-btn' (click)='delete()'>Delete</button>
     <button class='asset-editor__save-btn' (click)='save($event)'>Save</button>
-    <button (click)='createAsset()'> Create New {{ assetType && (assetType[0].toUpperCase() + assetType.slice(1)) }} </button>
+    <button (click)='createAsset()'> Create New {{ assetType | titlecase }} </button>
 </div>
 <div class='asset-editor__tools'>
     <button class='asset-editor__clear-btn' (click)='clear()'>Clear</button>
@@ -20,7 +17,7 @@
         <input type='color' [(ngModel)]='brushColor'>
     </div>
     <div class='asset-editor__brush-sizer'>
-        <label *ngIf='drawType === "brush" || drawType === "eraser"'>{{ drawType && (drawType[0].toUpperCase() + drawType.slice(1)) }} Size</label>
+        <label *ngIf='drawType === "brush" || drawType === "eraser"'>{{ drawType | titlecase }} Size</label>
         <input *ngIf='drawType === "brush" || drawType === "eraser"' type="range" [min]='0' [max]='20' [step]='1' [(ngModel)]='brushSize'>
     </div>
 </div>

@@ -11,17 +11,19 @@ import { WorldEditorComponent } from './components/world-editor/world-editor.com
 import { AssetEditorComponent } from './components/asset-editor/asset-editor.component';
 import { AssetPreviewComponent } from './components/asset-preview/asset-preview.component';
 import { SessionManagerComponent } from './components/session-manager/session-manager.component';
+import { AssetsComponent } from './components/assets/assets.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GameScreenComponent,
-    HomeComponent,
-    UserProfileComponent,
-    WorldEditorComponent,
     AssetEditorComponent,
     AssetPreviewComponent,
+    AssetsComponent,
+    GameScreenComponent,
+    HomeComponent,
     SessionManagerComponent,
+    UserProfileComponent,
+    WorldEditorComponent,
   ],
   imports: [
     BrowserModule,

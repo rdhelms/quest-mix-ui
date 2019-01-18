@@ -9,6 +9,7 @@ import { IAsset } from '../../types/asset.types';
 })
 export class AssetPreviewComponent implements OnChanges, AfterViewInit, OnDestroy {
 
+    @Input() canvasBorder = true;
     @Input() canvasSize!: number;
     @Input() asset?: IAsset;
 

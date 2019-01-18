@@ -9,7 +9,7 @@ import { TSelectedAssetEvent } from './home/home.component';
     styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-    view = 'worlds';
+    view = 'assets';
     currentlyEditing?: any = {
         type: 'avatar',
         info: {

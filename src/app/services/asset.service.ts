@@ -6,6 +6,7 @@ import { ForegroundService } from './foreground.service';
 import { AvatarService } from './avatar.service';
 import { EntityService } from './entity.service';
 import { ObjectService } from './object.service';
+import { UserService } from './user.service';
 
 @Injectable({
     providedIn: 'root',
@@ -16,6 +17,7 @@ export class AssetService {
     currentAsset?: IAsset;
 
     constructor(
+        private userService: UserService,
         private backgroundService: BackgroundService,
         private foregroundService: ForegroundService,
         private avatarService: AvatarService,
@@ -45,15 +47,21 @@ export class AssetService {
     }
 
     async createAsset(type: TAssetType) {
-        const newAsset: IAsset = {
-            id: Date.now(),
-            name: '',
-            frames: (type === 'background' || type === 'foreground') ? [[]] : Array(4).fill(null).map(() => []),
-        };
-        const assets = await this.getAssets();
-        assets.push(newAsset);
-        localStorage.setItem(`${this.currentType}List`, JSON.stringify(assets));
-        return newAsset;
+        const user = this.userService.currentUser;
+        if (user) {
+            const newAsset: IAsset = {
+                id: Date.now(),
+                name: '',
+                frames: (type === 'background' || type === 'foreground') ? [[]] : Array(4).fill(null).map(() => []),
+                ownerId: user.id,
+            };
+            const assets = await this.getAssets();
+            assets.push(newAsset);
+            localStorage.setItem(`${this.currentType}List`, JSON.stringify(assets));
+            return newAsset;
+        } else {
+            return undefined;
+        }
     }
 
     async saveAsset(newAsset: IAsset) {
@@ -64,21 +72,25 @@ export class AssetService {
                 this.currentType === 'avatar' ? this.avatarService.getAvatarById(newAsset.id) :
                 this.currentType === 'entity' ? this.entityService.getEntityById(newAsset.id) :
                 this.objectService.getObjectById(newAsset.id);
-            await existingAssetRequest.toPromise();
-            const updateAssetRequest = this.currentType === 'background' ? this.backgroundService.updateBackground(newAsset) :
-                this.currentType === 'foreground' ? this.foregroundService.updateForeground(newAsset) :
-                this.currentType === 'avatar' ? this.avatarService.updateAvatar(newAsset) :
-                this.currentType === 'entity' ? this.entityService.updateEntity(newAsset) :
-                this.objectService.updateObject(newAsset);
-            await updateAssetRequest.toPromise();
+            const existingAsset = await existingAssetRequest.toPromise();
+            if (existingAsset) {
+                const updateAssetRequest = this.currentType === 'background' ? this.backgroundService.updateBackground(newAsset) :
+                    this.currentType === 'foreground' ? this.foregroundService.updateForeground(newAsset) :
+                    this.currentType === 'avatar' ? this.avatarService.updateAvatar(newAsset) :
+                    this.currentType === 'entity' ? this.entityService.updateEntity(newAsset) :
+                    this.objectService.updateObject(newAsset);
+                await updateAssetRequest.toPromise();
+            } else {
+                const createRequest =
+                    this.currentType === 'background' ? this.backgroundService.createBackground(newAsset) :
+                    this.currentType === 'foreground' ? this.foregroundService.createForeground(newAsset) :
+                    this.currentType === 'avatar' ? this.avatarService.createAvatar(newAsset) :
+                    this.currentType === 'entity' ? this.entityService.createEntity(newAsset) :
+                    this.objectService.createObject(newAsset);
+                await createRequest.toPromise();
+            }
         } catch (err) {
-            const createRequest =
-                this.currentType === 'background' ? this.backgroundService.createBackground(newAsset) :
-                this.currentType === 'foreground' ? this.foregroundService.createForeground(newAsset) :
-                this.currentType === 'avatar' ? this.avatarService.createAvatar(newAsset) :
-                this.currentType === 'entity' ? this.entityService.createEntity(newAsset) :
-                this.objectService.createObject(newAsset);
-            await createRequest.toPromise();
+            alert('There was an error saving the asset');
         }
     }
 
