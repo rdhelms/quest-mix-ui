@@ -24,7 +24,7 @@ export class SessionManagerComponent implements OnInit {
 
     constructor(
         private sessionService: SessionService,
-        private userService: UserService,
+        public userService: UserService,
     ) { }
 
     ngOnInit() {
@@ -57,9 +57,14 @@ export class SessionManagerComponent implements OnInit {
         }
     }
 
-    signOut() {
+    async signOut() {
         this.signedIn = false;
         this.userService.currentUser = undefined;
+        try {
+            const deleteResponse = await this.sessionService.deleteSession().toPromise();
+        } catch (err) {
+            console.log(err);
+        }
         this.newView.emit('home');
         this.loggedOut.emit();
     }

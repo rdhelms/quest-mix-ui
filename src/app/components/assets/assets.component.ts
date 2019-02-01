@@ -23,7 +23,7 @@ export class AssetsComponent implements OnInit {
     asset?: IAsset;
 
     constructor(
-        private userService: UserService,
+        public userService: UserService,
         private assetService: AssetService,
     ) { }
 

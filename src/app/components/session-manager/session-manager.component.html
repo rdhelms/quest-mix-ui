@@ -1,17 +1,17 @@
 <button 
-    *ngIf='!signedIn' 
+    *ngIf='!userService.currentUser' 
     class='session-manager__sign-in-btn'
     (click)='signInClicked()'>
     Sign In
 </button>
 <button 
-    *ngIf='signedIn' 
+    *ngIf='userService.currentUser' 
     class='session-manager__sign-out-btn'
     (click)='signOut()'>
     Sign Out
 </button>
 <button 
-    *ngIf='!signedIn' 
+    *ngIf='!userService.currentUser' 
     class='session-manager__register-btn'
     (click)='registerClicked()'>
     Register

@@ -10,7 +10,7 @@
     <div class='assets__loading'>Loading...</div>
 </ng-container>
 <ng-container *ngIf='viewState === "public"'>
-    <ul class='assets__public-asset-list'>
+    <ul *ngIf='assetList.length > 0' class='assets__public-asset-list'>
         <li *ngFor='let asset of assetList'
             (click)="selectAsset(asset)"
             class='assets__public-asset-list-item'>
@@ -26,9 +26,12 @@
             </div>
         </li>
     </ul>
+    <div *ngIf='assetList.length === 0' class='assets__no-assets-yet'>
+        <h3>No one has made any {{pluralizeAssetType(assetType)}} yet!</h3>
+    </div>
 </ng-container>
 <ng-container *ngIf='viewState === "private"'>
-    <ng-container *ngIf='user'>
+    <ng-container *ngIf='userService.currentUser'>
         <ul *ngIf='myAssets.length > 0'>
             <li *ngFor='let asset of myAssets'>{{asset.name}}</li>
         </ul>
@@ -36,7 +39,7 @@
             <h3>You haven't made any {{pluralizeAssetType(assetType)}} yet!</h3>
         </div>
     </ng-container>
-    <ng-container *ngIf='!user'>
+    <ng-container *ngIf='!userService.currentUser'>
         <div class='assets__sign-in-prompt-container'>
             <div class='assets__sign-in-prompt'>
                 <h3>You must sign in to view your own {{pluralizeAssetType(assetType)}}</h3>
@@ -46,7 +49,7 @@
     </ng-container>
 </ng-container>
 <ng-container *ngIf='viewState === "edit"'>
-    <ng-container *ngIf='user'>
+    <ng-container *ngIf='userService.currentUser'>
         <ng-container *ngIf='asset'>
             <asset-editor
                 [asset]="asset"
@@ -61,7 +64,7 @@
             </div>
         </ng-container>
     </ng-container>
-    <ng-container *ngIf='!user'>
+    <ng-container *ngIf='!userService.currentUser'>
         <div class='assets__sign-in-prompt-container'>
             <div class='assets__sign-in-prompt'>
                 <h3>You must sign in to edit {{pluralizeAssetType(assetType)}}</h3>

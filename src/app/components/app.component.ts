@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { WorldService } from '../services/world.service';
 import { TSelectedAssetEvent } from './home/home.component';
+import { SessionService } from '../services/session.service';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+    loading = true;
     view = 'assets';
     currentlyEditing?: any = {
         type: 'avatar',
@@ -20,7 +22,17 @@ export class AppComponent {
     constructor(
         private worldService: WorldService,
         public userService: UserService,
+        private sessionService: SessionService,
     ) { }
+
+    async ngOnInit() {
+        this.loading = true;
+        try {
+            const loggedInUser = await this.sessionService.loadUserFromSession().toPromise();
+            this.userService.currentUser = loggedInUser;
+        } catch (err) { }
+        this.loading = false;
+    }
 
     changeView(newView: 'home' | 'profile' | 'quests' | 'worlds' | 'assets') {
         this.view = newView;
