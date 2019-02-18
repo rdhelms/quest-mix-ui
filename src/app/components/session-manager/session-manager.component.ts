@@ -61,7 +61,7 @@ export class SessionManagerComponent implements OnInit {
         this.signedIn = false;
         this.userService.currentUser = undefined;
         try {
-            const deleteResponse = await this.sessionService.deleteSession().toPromise();
+            await this.sessionService.deleteSession().toPromise();
         } catch (err) {
             console.log(err);
         }
