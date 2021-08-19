@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import '@/globals.scss'
 import App from '@/App.vue'
 import '@/registerServiceWorker'
 import router from '@/router'

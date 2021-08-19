@@ -8,7 +8,7 @@
             <button
                 v-if="!isGameRunning"
                 class="play__start-btn"
-                @click="startGame"
+                @click="runGame"
             >
                 Start Game
             </button>
@@ -36,9 +36,9 @@ export default class Play extends Vue {
     player: IPlayer = {
         x: 200,
         y: 200,
-        width: 20,
-        height: 40,
-        speed: 1,
+        width: 40,
+        height: 80,
+        speed: 2,
         action: 'stand',
         color: '#ffffff',
     }
@@ -54,10 +54,12 @@ export default class Play extends Vue {
 
         this.canvas = document.getElementById('gameCanvas') as HTMLCanvasElement
 
-        this.startGame()
+        this.runGame()
     }
 
     beforeDestroy () {
+        window.removeEventListener('keyup', this.handleKeyUp)
+        window.removeEventListener('keydown', this.handleKeyDown)
         if (this.animationHandle !== null) {
             window.cancelAnimationFrame(this.animationHandle)
         }
@@ -81,7 +83,7 @@ export default class Play extends Vue {
         }
     }
 
-    updatePlayer () {
+    updatePlayerPosition () {
         const player = this.player
         if (player.action === 'walkRight') {
             player.x += player.speed
@@ -91,6 +93,12 @@ export default class Play extends Vue {
             player.y -= player.speed
         } else if (player.action === 'walkDown') {
             player.y += player.speed
+        }
+    }
+
+    clearCanvas () {
+        if (this.canvas && this.ctx) {
+            this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height)
         }
     }
 
@@ -110,22 +118,26 @@ export default class Play extends Vue {
         }
     }
 
-    startGame () {
+    runGame () {
         this.isGameRunning = true
 
-        this.updatePlayer()
+        this.updatePlayerPosition()
 
+        this.clearCanvas()
         this.drawBackground()
         this.drawPlayer()
 
-        this.animationHandle = window.requestAnimationFrame(this.startGame)
+        this.animationHandle = window.requestAnimationFrame(this.runGame)
     }
 }
 </script>
 
 <style lang="scss" scoped>
 .play {
-    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 
     &__game-container {
         position: relative;
