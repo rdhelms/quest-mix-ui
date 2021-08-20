@@ -97,7 +97,6 @@ export default class Create extends Vue {
             } else {
                 this.imageData.push({ x, y, color: this.drawColor })
             }
-            console.log(this.imageData.length)
         }
     }
 
