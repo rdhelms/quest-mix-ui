@@ -11,13 +11,29 @@
                 @mouseenter="showCursor = true"
                 @mouseleave="showCursor = false"
                 @mousemove="mouseMove"
+                @mousedown="mouseDown"
+                @mouseup="mouseUp"
             />
+        </div>
+        <div>
+            <label>Draw Color</label>
+            <input
+                v-model="drawColor"
+                class="create__color-picker"
+                type="color"
+            >
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+
+interface IPixel {
+    x: number
+    y: number
+    color: string
+}
 
 @Component
 export default class Create extends Vue {
@@ -30,7 +46,9 @@ export default class Create extends Vue {
         x: 0,
         y: 0,
     }
-    drawColor = '#ff00ff'
+    drawColor = '#0000ff'
+    isPainting = false
+    imageData: IPixel[] = []
 
     get ctx () {
         return this.canvas?.getContext('2d') || null
@@ -48,14 +66,54 @@ export default class Create extends Vue {
         }
     }
 
+    mouseDown () {
+        this.isPainting = true
+        this.paintCurrentPixel()
+    }
+
+    mouseUp () {
+        this.isPainting = false
+    }
+
     mouseMove (e: MouseEvent) {
-        this.cursorPos.x = Math.floor(e.offsetX / this.pixelWidth)
-        this.cursorPos.y = Math.floor(e.offsetY / this.pixelHeight)
+        const x = Math.floor(e.offsetX / this.pixelWidth)
+        const y = Math.floor(e.offsetY / this.pixelHeight)
+        if (x !== this.cursorPos.x || y !== this.cursorPos.y) {
+            this.cursorPos.x = x
+            this.cursorPos.y = y
+    
+            this.paintCurrentPixel()
+        }
+    }
+
+    paintCurrentPixel () {
+        const x = this.cursorPos.x
+        const y = this.cursorPos.y
+
+        if (this.isPainting) {
+            const existingPixel = this.imageData.find(pixel => pixel.x === x && pixel.y === y)
+            if (existingPixel) {
+                existingPixel.color = this.drawColor
+            } else {
+                this.imageData.push({ x, y, color: this.drawColor })
+            }
+            console.log(this.imageData.length)
+        }
     }
 
     clearCanvas () {
         if (this.canvas && this.ctx) {
             this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        }
+    }
+
+    drawImage () {
+        const ctx = this.ctx
+        if (ctx) {
+            this.imageData.forEach(pixel => {
+                ctx.fillStyle = pixel.color
+                ctx.fillRect(pixel.x * this.pixelWidth, pixel.y * this.pixelHeight, this.pixelWidth, this.pixelHeight)
+            })
         }
     }
 
@@ -99,6 +157,7 @@ export default class Create extends Vue {
 
     renderDrawing () {
         this.clearCanvas()
+        this.drawImage()
         this.drawGrid()
         this.drawCursor()
 
@@ -126,6 +185,10 @@ export default class Create extends Vue {
     #createCanvas {
         width: 960px;
         height: 540px;
+    }
+
+    &__color-picker {
+        margin: 10px;
     }
 }
 </style>
