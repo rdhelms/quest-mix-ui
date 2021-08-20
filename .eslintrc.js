@@ -25,5 +25,6 @@ module.exports = {
         }],
         '@typescript-eslint/indent': [ 'error', 4 ],
         '@typescript-eslint/explicit-module-boundary-types': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
     },
 }
