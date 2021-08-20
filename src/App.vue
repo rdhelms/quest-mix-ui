@@ -1,40 +1,44 @@
 <template>
     <div id="app" class="app">
         <div class="app__header">
-            <div class="app__title">
-                Quest Mix
-            </div>
             <RouterLink
-                class="app__nav-link"
-                active-class="app__nav-link--active"
-                :to="{ name: 'create' }"
+                class="app__title"
+                :to="{ name: 'home' }"
             >
-                Create
+                Quest Mix
             </RouterLink>
             <RouterLink
                 class="app__nav-link"
                 active-class="app__nav-link--active"
-                :to="{ name: 'play' }"
+                :to="{ name: 'designs' }"
             >
-                Play
+                Designs
+            </RouterLink>
+            <RouterLink
+                class="app__nav-link"
+                active-class="app__nav-link--active"
+                :to="{ name: 'games' }"
+            >
+                Games
             </RouterLink>
         </div>
-        <router-view/>
+        <RouterView />
     </div>
 </template>
 
 <style lang="scss" scoped>
 .app {
+    height: 100%;
+
     &__header {
         position: relative;
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: center;
         width: 100%;
         height: 54px;
         background-color: #043580;
         color: white;
-        margin-bottom: 10px;
     }
 
     &__title {
@@ -42,6 +46,9 @@
         left: 0;
         padding: 0 10px;
         font-size: 1.5rem;
+        cursor: pointer;
+        color: white;
+        text-decoration: none;
     }
 
     &__nav-link {

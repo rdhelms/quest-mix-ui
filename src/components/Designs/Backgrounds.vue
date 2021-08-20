@@ -1,11 +1,11 @@
 <template>
-    <div class="create">
+    <div class="backgrounds">
         <div>
-            Create
+            <input type="text" v-model="name" placeholder="Name">
         </div>
-        <div class="create__canvas-container">
+        <div class="backgrounds__canvas-container">
             <canvas
-                id="createCanvas"
+                id="backgroundCanvas"
                 width="960"
                 height="540"
                 @mouseenter="showCursor = true"
@@ -19,7 +19,7 @@
             <label>Draw Color</label>
             <input
                 v-model="drawColor"
-                class="create__color-picker"
+                class="backgrounds__color-picker"
                 type="color"
             >
         </div>
@@ -29,6 +29,11 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 
+interface IBackground {
+    name: string
+    imageData: IPixel[]
+}
+
 interface IPixel {
     x: number
     y: number
@@ -36,7 +41,7 @@ interface IPixel {
 }
 
 @Component
-export default class Create extends Vue {
+export default class Backgrounds extends Vue {
     readonly pixelWidth = 16
     readonly pixelHeight = 9
     canvas: HTMLCanvasElement | null = null
@@ -48,6 +53,7 @@ export default class Create extends Vue {
     }
     drawColor = '#0000ff'
     isPainting = false
+    name = ''
     imageData: IPixel[] = []
 
     get ctx () {
@@ -55,9 +61,9 @@ export default class Create extends Vue {
     }
 
     mounted () {
-        this.canvas = document.getElementById('createCanvas') as HTMLCanvasElement
+        this.canvas = document.getElementById('backgroundCanvas') as HTMLCanvasElement
 
-        this.renderDrawing()
+        this.renderBackground()
     }
 
     beforeDestroy () {
@@ -106,7 +112,7 @@ export default class Create extends Vue {
         }
     }
 
-    drawImage () {
+    drawPixels () {
         const ctx = this.ctx
         if (ctx) {
             this.imageData.forEach(pixel => {
@@ -154,19 +160,27 @@ export default class Create extends Vue {
         }
     }
 
-    renderDrawing () {
+    renderBackground () {
         this.clearCanvas()
-        this.drawImage()
+        this.drawPixels()
         this.drawGrid()
         this.drawCursor()
 
-        this.animationHandle = window.requestAnimationFrame(this.renderDrawing)
+        this.animationHandle = window.requestAnimationFrame(this.renderBackground)
+    }
+
+    saveBackground () {
+        const background: IBackground = {
+            name: this.name,
+            imageData: this.imageData,
+        }
+        console.log(background)
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.create {
+.backgrounds {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -181,7 +195,7 @@ export default class Create extends Vue {
         border: 1px solid black;
     }
 
-    #createCanvas {
+    #backgroundCanvas {
         width: 960px;
         height: 540px;
     }

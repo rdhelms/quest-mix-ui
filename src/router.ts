@@ -1,26 +1,34 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '@/components/Home.vue'
-import Create from '@/components/Create.vue'
-import Play from '@/components/Play.vue'
+import Designs from '@/components/Designs.vue'
+import Games from '@/components/Games.vue'
+import Backgrounds from '@/components/Designs/Backgrounds.vue'
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
     {
         path: '/',
-        name: 'Home',
+        name: 'home',
         component: Home,
     },
     {
-        path: '/create',
-        name: 'create',
-        component: Create,
+        path: '/designs',
+        name: 'designs',
+        component: Designs,
+        children: [
+            {
+                path: 'backgrounds',
+                name: 'backgrounds',
+                component: Backgrounds,
+            },
+        ],
     },
     {
-        path: '/play',
-        name: 'play',
-        component: Play,
+        path: '/games',
+        name: 'games',
+        component: Games,
     },
 ]
 
