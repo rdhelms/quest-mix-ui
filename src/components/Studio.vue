@@ -1,36 +1,120 @@
 <template>
-    <div class="design">
-        <div class="design__sidebar">
-            <RouterLink
-                :to="{
-                    name: 'world'
+    <div class="studio">
+        <div class="studio__sidebar">
+            <div
+                class="studio__drawer"
+                :class="{
+                    'studio__drawer--open': openDrawer === 'worlds',
+                }"
+                @click="toggleDrawer('worlds')"
+            >
+                Worlds
+                <div
+                    class="studio__drawer-arrow"
+                    :class="{
+                        'studio__drawer-arrow--open': openDrawer === 'worlds',
+                    }"
+                >
+                    &#9658;
+                </div>
+            </div>
+            <div
+                ref="worldsDrawerContents"
+                class="studio__drawer-contents"
+                :class="{
+                    'studio__drawer-contents--open': openDrawer === 'worlds',
                 }"
             >
-                World
-            </RouterLink>
-            <RouterLink
-                :to="{
-                    name: 'background'
+                <div class="studio__drawer-item" @click="newWorldClicked">
+                    + New
+                </div>
+            </div>
+            <div
+                class="studio__drawer"
+                :class="{
+                    'studio__drawer--open': openDrawer === 'backgrounds',
+                }"
+                @click="toggleDrawer('backgrounds')"
+            >
+                Backgrounds
+                <div
+                    class="studio__drawer-arrow"
+                    :class="{
+                        'studio__drawer-arrow--open': openDrawer === 'backgrounds',
+                    }"
+                >
+                    &#9658;
+                </div>
+            </div>
+            <div
+                ref="backgroundsDrawerContents"
+                class="studio__drawer-contents"
+                :class="{
+                    'studio__drawer-contents--open': openDrawer === 'backgrounds',
                 }"
             >
-                Background
-            </RouterLink>
-            <RouterLink
-                :to="{
-                    name: 'entity'
+                <div class="studio__drawer-item" @click="newBackgroundClicked">
+                    + New
+                </div>
+            </div>
+            <div
+                class="studio__drawer"
+                :class="{
+                    'studio__drawer--open': openDrawer === 'objects',
+                }"
+                @click="toggleDrawer('objects')"
+            >
+                Objects
+                <div
+                    class="studio__drawer-arrow"
+                    :class="{
+                        'studio__drawer-arrow--open': openDrawer === 'objects',
+                    }"
+                >
+                    &#9658;
+                </div>
+            </div>
+            <div
+                ref="objectsDrawerContents"
+                class="studio__drawer-contents"
+                :class="{
+                    'studio__drawer-contents--open': openDrawer === 'objects',
                 }"
             >
-                Entity
-            </RouterLink>
-            <RouterLink
-                :to="{
-                    name: 'object'
+                <div class="studio__drawer-item" @click="newObjectClicked">
+                    + New
+                </div>
+            </div>
+            <div
+                class="studio__drawer"
+                :class="{
+                    'studio__drawer--open': openDrawer === 'entities',
+                }"
+                @click="toggleDrawer('entities')"
+            >
+                Entities
+                <div
+                    class="studio__drawer-arrow"
+                    :class="{
+                        'studio__drawer-arrow--open': openDrawer === 'entities',
+                    }"
+                >
+                    &#9658;
+                </div>
+            </div>
+            <div
+                ref="entitiesDrawerContents"
+                class="studio__drawer-contents"
+                :class="{
+                    'studio__drawer-contents--open': openDrawer === 'entities',
                 }"
             >
-                Object
-            </RouterLink>
+                <div class="studio__drawer-item" @click="newEntityClicked">
+                    + New
+                </div>
+            </div>
         </div>
-        <div class="design__main">
+        <div class="studio__main">
             <RouterView />
         </div>
     </div>
@@ -40,21 +124,61 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component
-export default class Design extends Vue {
+export default class Studio extends Vue {
+    openDrawer: 'worlds' | 'backgrounds' | 'objects' | 'entities' | null = null
+
+    get drawerEls () {
+        return [
+            this.$refs['worldsDrawerContents'] as HTMLElement,
+            this.$refs['backgroundsDrawerContents'] as HTMLElement,
+            this.$refs['objectsDrawerContents'] as HTMLElement,
+            this.$refs['entitiesDrawerContents'] as HTMLElement,
+        ]
+    }
+
     mounted () {
-        // If we store some reference to "the last thing being worked on" then we could take the user to that
-        // instead of defaulting to background
-        if (this.$route.name !== 'background') {
-            this.$router.push({
-                name: 'background',
-            })
+        this.toggleDrawer('worlds')
+    }
+
+    toggleDrawer (drawerName: Studio['openDrawer']) {
+        if (this.openDrawer === drawerName) {
+            this.openDrawer = null
+        } else {
+            this.openDrawer = drawerName
         }
+
+        const openDrawerEl = this.openDrawer
+            ? this.$refs[`${this.openDrawer}DrawerContents`] as HTMLElement
+            : null
+        this.drawerEls.forEach(el => {
+            if (el === openDrawerEl) {
+                el.style.height = el.scrollHeight + 'px'
+            } else {
+                el.style.height = '0px'
+            }
+        })
+    }
+
+    newWorldClicked () {
+        this.$router.push({ name: 'world' })
+    }
+
+    newBackgroundClicked () {
+        this.$router.push({ name: 'background' })
+    }
+
+    newObjectClicked () {
+        this.$router.push({ name: 'object' })
+    }
+
+    newEntityClicked () {
+        this.$router.push({ name: 'entity' })
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.design {
+.studio {
     display: flex;
     width: 100%;
     height: calc(100% - 54px);
@@ -65,7 +189,53 @@ export default class Design extends Vue {
         width: 330px;
         height: 100%;
         background-color: white;
+        border-right: 1px solid #475967;
+    }
+
+    &__drawer {
+        display: flex;
+        width: 100%;
         padding: 10px;
+        text-decoration: none;
+        color: black;
+        border-bottom: 1px solid #475967;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #475967;
+            color: white;
+        }
+
+        &--open {
+            background-color: #475967;
+            color: white;
+        }
+    }
+
+    &__drawer-arrow {
+        margin-left: 6px;
+        transform: scale(0.8, 0.6);
+
+        &--open {
+            transform: scale(0.8, 0.6) rotate(90deg);
+        }
+    }
+
+    &__drawer-contents {
+        height: 0;
+        background-color: #f4f5f9;
+        transition: height 0.2s ease-in-out;
+        overflow: hidden;
+    }
+
+    &__drawer-item {
+        padding: 10px 24px;
+        border-bottom: 1px solid #475967;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #dfe3e7;
+        }
     }
 
     &__main {

@@ -1,6 +1,6 @@
 <template>
     <div class="world">
-        World
+        <h3>World Editor</h3>
     </div>
 </template>
 

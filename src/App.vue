@@ -10,14 +10,14 @@
             <RouterLink
                 class="app__nav-link"
                 active-class="app__nav-link--active"
-                :to="{ name: 'play' }"
+                :to="{ name: 'arcade' }"
             >
                 Arcade
             </RouterLink>
             <RouterLink
                 class="app__nav-link"
                 active-class="app__nav-link--active"
-                :to="{ name: 'design' }"
+                :to="{ name: 'studio' }"
             >
                 Studio
             </RouterLink>

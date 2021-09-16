@@ -1,6 +1,6 @@
 <template>
-    <div class="object-studio">
-        Object
+    <div class="entity">
+        <h3>Entity Editor</h3>
     </div>
 </template>
 
@@ -8,13 +8,13 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component
-export default class ObjectStudio extends Vue { // ObjectStudio instead of Object to avoid conflict with Object class
+export default class Entity extends Vue {
     
 }
 </script>
 
 <style lang="scss" scoped>
-.object-studio {
+.entity {
     // noop
 }
 </style>

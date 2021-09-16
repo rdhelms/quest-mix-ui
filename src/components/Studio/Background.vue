@@ -1,7 +1,13 @@
 <template>
     <div class="background">
-        <div>
-            <input type="text" v-model="name" placeholder="Name">
+        <h3>Background Editor</h3>
+        <div class="background__name-container">
+            <input
+                type="text"
+                v-model="name"
+                placeholder="Name"
+                class="background__name-input"
+            >
         </div>
         <div class="background__canvas-container">
             <canvas
@@ -178,6 +184,15 @@ export default class Background extends Vue {
     flex-direction: column;
     align-items: center;
     width: 100%;
+
+    &__name-container {
+        margin-bottom: 10px;
+    }
+
+    &__name-input {
+        padding: 6px;
+        font-size: 18px;
+    }
 
     &__canvas-container {
         background-color: white;

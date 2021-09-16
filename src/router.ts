@@ -3,10 +3,11 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '@/components/Home.vue'
 import Studio from '@/components/Studio.vue'
 import Arcade from '@/components/Arcade.vue'
-import World from '@/components/Design/World.vue'
-import Background from '@/components/Design/Background.vue'
-import Entity from '@/components/Design/Entity.vue'
-import ObjectStudio from '@/components/Design/ObjectStudio.vue'
+import World from '@/components/Studio/World.vue'
+import Background from '@/components/Studio/Background.vue'
+import Entity from '@/components/Studio/Entity.vue'
+import ObjectStudio from '@/components/Studio/ObjectStudio.vue'
+import Game from '@/components/Game.vue'
 
 Vue.use(VueRouter)
 
@@ -17,8 +18,8 @@ const routes: Array<RouteConfig> = [
         component: Home,
     },
     {
-        path: '/design',
-        name: 'design',
+        path: '/studio',
+        name: 'studio',
         component: Studio,
         children: [
             {
@@ -44,9 +45,14 @@ const routes: Array<RouteConfig> = [
         ],
     },
     {
-        path: '/play',
-        name: 'play',
+        path: '/arcade',
+        name: 'arcade',
         component: Arcade,
+    },
+    {
+        path: '/play/:gameId',
+        name: 'play',
+        component: Game,
     },
     {
         path: '*',
