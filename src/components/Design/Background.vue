@@ -1,9 +1,9 @@
 <template>
-    <div class="backgrounds">
+    <div class="background">
         <div>
             <input type="text" v-model="name" placeholder="Name">
         </div>
-        <div class="backgrounds__canvas-container">
+        <div class="background__canvas-container">
             <canvas
                 id="backgroundCanvas"
                 width="960"
@@ -19,7 +19,7 @@
             <label>Draw Color</label>
             <input
                 v-model="drawColor"
-                class="backgrounds__color-picker"
+                class="background__color-picker"
                 type="color"
             >
         </div>
@@ -33,7 +33,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import { IBackground, IPixel } from '@/store/backgrounds/state'
 
 @Component
-export default class Backgrounds extends Vue {
+export default class Background extends Vue {
     readonly pixelWidth = 16
     readonly pixelHeight = 9
     canvas: HTMLCanvasElement | null = null
@@ -173,7 +173,7 @@ export default class Backgrounds extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.backgrounds {
+.background {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -1,13 +1,13 @@
 <template>
-    <div class="games">
+    <div class="play">
         <div>
             Play
         </div>
-        <div class="games__game-container">
+        <div class="play__game-container">
             <canvas id="gameCanvas" width="960" height="540" />
             <button
                 v-if="!isGameRunning"
-                class="games__start-btn"
+                class="play__start-btn"
                 @click="runGame"
             >
                 Start Game
@@ -30,7 +30,7 @@ interface IPlayer {
 }
 
 @Component
-export default class Games extends Vue {
+export default class Play extends Vue {
     canvas: HTMLCanvasElement | null = null
     isGameRunning = false
     player: IPlayer = {
@@ -133,7 +133,7 @@ export default class Games extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.games {
+.play {
     display: flex;
     flex-direction: column;
     align-items: center;
