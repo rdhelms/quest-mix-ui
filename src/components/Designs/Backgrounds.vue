@@ -23,22 +23,14 @@
                 type="color"
             >
         </div>
+        <button @click="saveBackground">Save</button>
     </div>
 </template>
 
 <script lang="ts">
+import { backgroundsModule } from '@/store/backgrounds/module'
 import { Component, Vue } from 'vue-property-decorator'
-
-interface IBackground {
-    name: string
-    imageData: IPixel[]
-}
-
-interface IPixel {
-    x: number
-    y: number
-    color: string
-}
+import { IBackground, IPixel } from '@/store/backgrounds/state'
 
 @Component
 export default class Backgrounds extends Vue {
@@ -169,12 +161,13 @@ export default class Backgrounds extends Vue {
         this.animationHandle = window.requestAnimationFrame(this.renderBackground)
     }
 
-    saveBackground () {
+    async saveBackground () {
         const background: IBackground = {
             name: this.name,
             imageData: this.imageData,
         }
-        console.log(background)
+        console.log('saveBackground', background)
+        await backgroundsModule.actions.saveBackground(background)
     }
 }
 </script>
