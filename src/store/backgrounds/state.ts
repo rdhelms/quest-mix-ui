@@ -6,7 +6,7 @@ export interface IPixel {
 
 export interface IBackground {
     name: string
-    imageData: IPixel[]
+    imageData: IPixel[][]
 }
 
 export interface IBackgroundsState {

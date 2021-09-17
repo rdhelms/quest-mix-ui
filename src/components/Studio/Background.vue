@@ -14,22 +14,36 @@
                 id="backgroundCanvas"
                 width="960"
                 height="540"
-                @mouseenter="showCursor = true"
-                @mouseleave="showCursor = false"
+                @mouseenter="mouseEnter"
+                @mouseleave="mouseLeave"
                 @mousemove="mouseMove"
                 @mousedown="mouseDown"
                 @mouseup="mouseUp"
             />
         </div>
-        <div>
-            <label>Draw Color</label>
-            <input
-                v-model="drawColor"
-                class="background__color-picker"
-                type="color"
-            >
+        <div class="background__toolbar">
+            <div>
+                <label>Brush Size</label>
+                <input
+                    v-model="brushSize"
+                    type="range"
+                    min="1"
+                    max="40"
+                >
+                <span>{{ brushSize }}</span>
+            </div>
+            <div>
+                <label>Draw Color</label>
+                <input
+                    v-model="drawColor"
+                    class="background__color-picker"
+                    type="color"
+                >
+            </div>
+            <button @mousedown="undoClicked" @mouseup="isUndoPressed = false">Undo</button>
+            <button @mousedown="redoClicked" @mouseup="isRedoPressed = false">Redo</button>
+            <button @click="saveBackground">Save</button>
         </div>
-        <button @click="saveBackground">Save</button>
     </div>
 </template>
 
@@ -40,26 +54,74 @@ import { IBackground, IPixel } from '@/store/backgrounds/state'
 
 @Component
 export default class Background extends Vue {
-    readonly pixelWidth = 16
-    readonly pixelHeight = 9
+    readonly pixelWidth = 4
+    readonly pixelHeight = 2
     canvas: HTMLCanvasElement | null = null
     animationHandle: number | null = null
     showCursor = false
+    showGrid = false
     cursorPos = {
         x: 0,
         y: 0,
     }
     drawColor = '#0000ff'
+    brushSize = 1
     isPainting = false
     name = ''
-    imageData: IPixel[] = []
+    imageData: IPixel[][] = []
+    history: { old: IPixel; new: IPixel }[] = []
+    undoStack: { old: IPixel; new: IPixel }[] = []
+    isUndoPressed = false
+    isRedoPressed = false
 
     get ctx () {
         return this.canvas?.getContext('2d') || null
     }
 
+    get gridSize () {
+        if (!this.canvas) {
+            return {
+                x: 0,
+                y: 0,
+            }
+        } else {
+            return {
+                x: Math.min(this.canvas.width / this.pixelWidth),
+                y: Math.min(this.canvas.height / this.pixelHeight),
+            }
+        }
+    }
+
+    get brush () {
+        const start = {
+            x: Math.max(this.cursorPos.x - (this.brushSize - 1), 0),
+            y: Math.max(this.cursorPos.y - (this.brushSize - 1), 0),
+        }
+        const end = {
+            x: Math.min(this.cursorPos.x + (this.brushSize - 1), this.gridSize.x - 1),
+            y: Math.min(this.cursorPos.y + (this.brushSize - 1), this.gridSize.y - 1),
+        }
+        return {
+            start,
+            end,
+        }
+    }
+
     mounted () {
         this.canvas = document.getElementById('backgroundCanvas') as HTMLCanvasElement
+
+        for (let x = 0; x < this.gridSize.x; x++) {
+            const column = []
+            for (let y = 0; y < this.gridSize.y; y++) {
+                column.push({
+                    x,
+                    y,
+                    color: '#ffffff',
+                })
+            }
+            this.imageData.push(column)
+        }
+
 
         this.renderBackground()
     }
@@ -68,6 +130,16 @@ export default class Background extends Vue {
         if (this.animationHandle !== null) {
             window.cancelAnimationFrame(this.animationHandle)
         }
+    }
+
+    mouseEnter () {
+        this.showCursor = true
+        // this.showGrid = true
+    }
+
+    mouseLeave () {
+        this.showCursor = false
+        // this.showGrid = false
     }
 
     mouseDown () {
@@ -90,16 +162,44 @@ export default class Background extends Vue {
         }
     }
 
-    paintCurrentPixel () {
-        const x = this.cursorPos.x
-        const y = this.cursorPos.y
+    undoClicked () {
+        this.isUndoPressed = true
+    }
 
-        if (this.isPainting) {
-            const existingPixel = this.imageData.find(pixel => pixel.x === x && pixel.y === y)
-            if (existingPixel) {
-                existingPixel.color = this.drawColor
-            } else {
-                this.imageData.push({ x, y, color: this.drawColor })
+    undo () {
+        const pixelChange = this.history.pop()
+        if (pixelChange) {
+            this.undoStack.push(pixelChange)
+            const newPixel = pixelChange.old
+            this.imageData[newPixel.x][newPixel.y] = newPixel
+        }
+    }
+
+    redoClicked () {
+        this.isRedoPressed = true
+    }
+
+    redo () {
+        const pixelChange = this.undoStack.pop()
+        if (pixelChange) {
+            const newPixel = pixelChange.new
+            this.imageData[newPixel.x][newPixel.y] = newPixel
+            this.history.push(pixelChange)
+        }
+    }
+
+    paintCurrentPixel () {
+        for (let x = this.brush.start.x; x <= this.brush.end.x; x++) {
+            for (let y = this.brush.start.y; y <= this.brush.end.y; y++) {
+                if (this.isPainting) {
+                    const oldPixel = this.imageData[x][y]
+                    const newPixel = { x, y, color: this.drawColor }
+                    this.imageData[x][y] = newPixel
+                    this.history.push({
+                        old: oldPixel,
+                        new: newPixel,
+                    })
+                }
             }
         }
     }
@@ -113,16 +213,23 @@ export default class Background extends Vue {
     drawPixels () {
         const ctx = this.ctx
         if (ctx) {
-            this.imageData.forEach(pixel => {
-                ctx.fillStyle = pixel.color
-                ctx.fillRect(pixel.x * this.pixelWidth, pixel.y * this.pixelHeight, this.pixelWidth, this.pixelHeight)
+            this.imageData.forEach(column => {
+                column.forEach(pixel => {
+                    ctx.fillStyle = pixel.color
+                    ctx.fillRect(
+                        pixel.x * this.pixelWidth,
+                        pixel.y * this.pixelHeight,
+                        this.pixelWidth,
+                        this.pixelHeight
+                    )
+                })
             })
         }
     }
 
     drawGrid () {
         const ctx = this.ctx
-        if (this.canvas && ctx) {
+        if (this.canvas && ctx && this.showGrid) {
             const width = this.canvas.width
             const height = this.canvas.height
             const gridColor = '#ddd'
@@ -149,16 +256,31 @@ export default class Background extends Vue {
         const ctx = this.ctx
         if (ctx && this.showCursor) {
             ctx.fillStyle = this.drawColor
-            ctx.fillRect(
-                this.cursorPos.x * this.pixelWidth,
-                this.cursorPos.y * this.pixelHeight,
-                this.pixelWidth,
-                this.pixelHeight
-            )
+            for (let x = this.brush.start.x; x <= this.brush.end.x; x++) {
+                for (let y = this.brush.start.y; y <= this.brush.end.y; y++) {
+                    ctx.fillRect(
+                        x * this.pixelWidth,
+                        y * this.pixelHeight,
+                        this.pixelWidth,
+                        this.pixelHeight
+                    )
+                }
+            }
         }
     }
 
     renderBackground () {
+        if (this.isUndoPressed) {
+            for (let i = 0; i < (this.brushSize * 2 - 1) * (this.brushSize * 2 - 1); i++) {
+                this.undo()
+            }
+        }
+        if (this.isRedoPressed) {
+            for (let i = 0; i < (this.brushSize * 2 - 1) * (this.brushSize * 2 - 1); i++) {
+                this.redo()
+            }
+        }
+
         this.clearCanvas()
         this.drawPixels()
         this.drawGrid()
@@ -206,6 +328,13 @@ export default class Background extends Vue {
     #backgroundCanvas {
         width: 960px;
         height: 540px;
+    }
+
+    &__toolbar {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
     }
 
     &__color-picker {

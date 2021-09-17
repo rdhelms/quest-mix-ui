@@ -160,19 +160,27 @@ export default class Studio extends Vue {
     }
 
     newWorldClicked () {
-        this.$router.push({ name: 'world' })
+        if (this.$route.name !== 'world') {
+            this.$router.push({ name: 'world' })
+        }
     }
 
     newBackgroundClicked () {
-        this.$router.push({ name: 'background' })
+        if (this.$route.name !== 'background') {
+            this.$router.push({ name: 'background' })
+        }
     }
 
     newObjectClicked () {
-        this.$router.push({ name: 'object' })
+        if (this.$route.name !== 'object') {
+            this.$router.push({ name: 'object' })
+        }
     }
 
     newEntityClicked () {
-        this.$router.push({ name: 'entity' })
+        if (this.$route.name !== 'entity') {
+            this.$router.push({ name: 'entity' })
+        }
     }
 }
 </script>
