@@ -42,7 +42,7 @@
             </div>
             <button @mousedown="undoClicked" @mouseup="isUndoPressed = false">Undo</button>
             <button @mousedown="redoClicked" @mouseup="isRedoPressed = false">Redo</button>
-            <button @click="saveBackground">Save</button>
+            <button @click="createBackground">Save</button>
         </div>
     </div>
 </template>
@@ -289,13 +289,17 @@ export default class Background extends Vue {
         this.animationHandle = window.requestAnimationFrame(this.renderBackground)
     }
 
-    async saveBackground () {
+    async createBackground () {
+        if (!this.name) {
+            alert('Enter a Name for the background')
+            return
+        }
         const background: IBackground = {
             name: this.name,
             imageData: this.imageData,
         }
-        console.log('saveBackground', background)
-        await backgroundsModule.actions.saveBackground(background)
+        console.log('createBackground', background)
+        await backgroundsModule.actions.createBackground(background)
     }
 }
 </script>

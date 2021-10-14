@@ -1,14 +1,12 @@
 import { IBackground } from '@/store/backgrounds/state'
-import { runServerFunction } from '@/store/serverUtils'
+import axios from 'axios'
 
-const saveBackground = async (background: IBackground) => {
-    const result = await runServerFunction('saveBackground', {
-        background,
-    })
-    console.log(result)
+const createBackground = async (background: IBackground) => {
+    const result = await axios.post(`${process.env.VUE_APP_SERVER_URL}/backgrounds`, background)
+    console.log(result.data)
     return result
 }
 
 export default {
-    saveBackground,
+    createBackground,
 }
