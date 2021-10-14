@@ -1,8 +1,8 @@
 import { IBackground } from '@/store/backgrounds/state'
-import { runCloudFunction } from '@/store/parseUtils'
+import { runServerFunction } from '@/store/serverUtils'
 
 const saveBackground = async (background: IBackground) => {
-    const result = await runCloudFunction('saveBackground', {
+    const result = await runServerFunction('saveBackground', {
         background,
     })
     console.log(result)
