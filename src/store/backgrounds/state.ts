@@ -5,6 +5,7 @@ export interface IPixel {
 }
 
 export interface IBackground {
+    objectId: string
     name: string
     imageData: IPixel[][]
 }

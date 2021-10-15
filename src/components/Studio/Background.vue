@@ -65,7 +65,7 @@ export default class Background extends Vue {
         y: 0,
     }
     drawColor = '#0000ff'
-    brushSize = 1
+    brushSize = 10
     isPainting = false
     name = ''
     imageData: IPixel[][] = []
@@ -294,7 +294,7 @@ export default class Background extends Vue {
             alert('Enter a Name for the background')
             return
         }
-        const background: IBackground = {
+        const background: Omit<IBackground, 'objectId'> = {
             name: this.name,
             imageData: this.imageData,
         }

@@ -11,38 +11,64 @@
             <h3>Worlds</h3>
             <div class="home__worlds">
                 <p>You haven't made any worlds yet.</p>
-                <button>Create a world</button>
+                <RouterLink :to="{ name: 'world' }">
+                    Create a world
+                </RouterLink>
             </div>
         </div>
         <div>
             <h3>Backgrounds</h3>
             <div class="home__backgrounds">
-                <p>You haven't made any backgrounds yet.</p>
-                <button>Create a background</button>
+                <ul v-if="backgrounds.length">
+                    <li
+                        v-for="background in backgrounds"
+                        :key="background.objectId"
+                    >
+                        {{ background.name }}
+                    </li>
+                </ul>
+                <p v-else>You haven't made any backgrounds yet.</p>
+                <RouterLink :to="{ name: 'background' }">
+                    Create a background
+                </RouterLink>
             </div>
         </div>
         <div>
             <h3>Objects</h3>
             <div class="home__objects">
                 <p>You haven't made any objects yet.</p>
-                <button>Create an object</button>
+                <RouterLink :to="{ name: 'object' }">
+                    Create an object
+                </RouterLink>
             </div>
         </div>
         <div>
             <h3>Entities</h3>
             <div class="home__entities">
                 <p>You haven't made any entities yet.</p>
-                <button>Create an entity</button>
+                <RouterLink :to="{ name: 'entity' }">
+                    Create an entity
+                </RouterLink>
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
+import { backgroundsModule } from '@/store/backgrounds/module'
+import { IBackground } from '@/store/backgrounds/state'
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component
-export default class Home extends Vue {}
+export default class Home extends Vue {
+    isLoading = true
+    backgrounds: IBackground[] = []
+
+    async mounted () {
+        this.backgrounds = await backgroundsModule.actions.fetchBackgrounds()
+        this.isLoading = false
+    }
+}
 </script>
 
 <style lang="scss" scoped>
