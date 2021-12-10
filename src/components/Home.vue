@@ -56,6 +56,7 @@
 
 <script lang="ts">
 import { backgroundsModule } from '@/store/backgrounds/module'
+import { socketIOModule } from '@/store/socketio/module'
 import { IBackground } from '@/store/backgrounds/state'
 import { Component, Vue } from 'vue-property-decorator'
 
@@ -63,6 +64,10 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class Home extends Vue {
     isLoading = true
     backgrounds: IBackground[] = []
+
+    get socket () {
+        return socketIOModule.state.socket
+    }
 
     async mounted () {
         this.backgrounds = await backgroundsModule.actions.fetchBackgrounds()
